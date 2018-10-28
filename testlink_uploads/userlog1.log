@@ -2066,3 +2066,4 @@ Undefined property: stdClass::$value - in C:\Users\stu\testlink-local\testlink-1
 	[18/Oct/28 17:15:39][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
 		E_WARNING
 curl_setopt(): CURLOPT_DNS_USE_GLOBAL_CACHE cannot be activated when thread safety is enabled - in C:\Users\stu\testlink-local\testlink-1.9.18\third_party\rtsuite_api_client\RtSuiteApiClient.php - Line 141
+[<<][5bd5eeac0338a490272340][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 17:15:24][18/Oct/28 17:16:39][took 75.63377 secs]
