@@ -110,6 +110,10 @@ class RtSuiteApiClient
         return $op;
     }
 
+    public function getProjects(){
+        return ["1","2"];
+    }
+
     protected function _request_json($method, $url, $body = NULL, $ignore_status = 0,
                                      $reporter = null)
     {

@@ -6,14 +6,16 @@
  * Time: 1:40 PM
  */
 //require_once ('../../third_party/Zend/Http/Client.php');
+require_once(TL_ABS_PATH.'/third_party/rtsuite_api_client/RtSuiteApiClient.php');
 class rtsuiterestInterface extends issueTrackerInterface
 {
+    private $APIClient;
 
     function connect()
     {
         $processCatch = false;
         $this->connected = true;
-        return;
+//        return;
         try
         {
             // CRITIC NOTICE for developers
@@ -21,10 +23,10 @@ class rtsuiterestInterface extends issueTrackerInterface
             // to cast properties BEFORE using it.
             $redUrl = (string)trim($this->cfg->uribase);
             $redAK = (string)trim($this->cfg->apikey);
-//            $projectId = (string)trim($this->cfg->projectidentifier); //TODO: check integer value
+            $projectId = (string)trim($this->cfg->projectidentifier); //TODO: check integer value
             $pxy = new stdClass();
 //            $pxy->proxy = config_get('proxy');
-//            $this->APIClient = new gitlab($redUrl,$redAK,$projectId, $pxy);
+            $this->APIClient = new RtSuiteApiClient($redUrl,$redAK,$projectId/*, $pxy*/);
             // to undestand if connection is OK, I will ask for projects.
             // I've tried to ask for users but get always ERROR from gitlab (not able to understand why).
             try
@@ -59,6 +61,8 @@ class rtsuiterestInterface extends issueTrackerInterface
 
     public function addIssue($summary,$description,$opt){
         error_log('sdbg');
+        $this->connect();
+        $this->APIClient->addIssue($summary,$description,$opt->value[1],$opt->value[0]);
 //        $request = new Zend_Http_Client('localhost:3333');
 //        $req = new Zend_Http_Client('http://localhost:3333');
 //        try {
@@ -78,7 +82,8 @@ class rtsuiterestInterface extends issueTrackerInterface
         $tpl = "<!-- Template " . __CLASS__ . " -->\n" .
             "<issuetracker>\n" .
             "<apikey>RTSUITE API KEY</apikey>\n" .
-            "<uribase>http://localhost:3333/</uribase>\n" .
+            "<uribase>rt suite base url</uribase>\n" .
+            "<projectidentifier>rt suite project id</projectidentifier>".
             "</issuetracker>\n";
         return $tpl;
     }
