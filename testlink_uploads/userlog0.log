@@ -1,0 +1,68 @@
+[>>][5bd5c3fa7d3a7469043419][DEFAULT][/install/installCheck.php][18/Oct/28 14:13:14]
+[<<][5bd5c3fa7d3a7469043419][DEFAULT][/install/installCheck.php][18/Oct/28 14:13:14][18/Oct/28 14:13:14][took 0.003923 secs]
+[>>][5bd5c4270591c551982314][DEFAULT][/install/installNewDB.php][18/Oct/28 14:13:59]
+	[18/Oct/28 14:13:59][ERROR][<nosession>][DATABASE]
+		ERROR ON exec_query() - database.class.php <br />1071 - Specified key was too long; max key length is 1000 bytes - CREATE TABLE /*prefix*/testcase_script_links (
+  `tcversion_id` int(10) unsigned NOT NULL default '0',
+  `project_key` varchar(64) NOT NULL,
+  `repository_name` varchar(64) NOT NULL,
+  `code_path` varchar(255) NOT NULL,
+  `branch_name` varchar(64) default NULL,
+  `commit_id` varchar(40) default NULL,
+  PRIMARY KEY  (`tcversion_id`,`project_key`,`repository_name`,`code_path`)
+) DEFAULT CHARSET=utf8<br />THE MESSAGE : CREATE TABLE /*prefix*/testcase_script_links (
+  `tcversion_id` int(10) unsigned NOT NULL default '0',
+  `project_key` varchar(64) NOT NULL,
+  `repository_name` varchar(64) NOT NULL,
+  `code_path` varchar(255) NOT NULL,
+  `branch_name` varchar(64) default NULL,
+  `commit_id` varchar(40) default NULL,
+  PRIMARY KEY  (`tcversion_id`,`project_key`,`repository_name`,`code_path`)
+) DEFAULT CHARSET=utf8
+Query failed: errorcode[1071]
+	errormsg:Specified key was too long; max key length is 1000 bytes 
+[<<][5bd5c4270591c551982314][DEFAULT][/install/installNewDB.php][18/Oct/28 14:13:59][18/Oct/28 14:13:59][took 0.299269 secs]
+[>>][5bd5c454561fd311562291][DEFAULT][/install/installCheck.php][18/Oct/28 14:14:44]
+[<<][5bd5c454561fd311562291][DEFAULT][/install/installCheck.php][18/Oct/28 14:14:44][18/Oct/28 14:14:44][took 0.002757 secs]
+[>>][5bd5c46157775554710804][DEFAULT][/install/installNewDB.php][18/Oct/28 14:14:57]
+	[18/Oct/28 14:14:58][WARNING][<nosession>][GUI]
+		E_WARNING
+count(): Parameter must be an array or an object that implements Countable - in C:\Users\stu\testlink-local\testlink-1.9.18\install\installNewDB.php - Line 472
+	[18/Oct/28 14:14:58][WARNING][<nosession>][GUI]
+		E_WARNING
+count(): Parameter must be an array or an object that implements Countable - in C:\Users\stu\testlink-local\testlink-1.9.18\install\installNewDB.php - Line 474
+[<<][5bd5c46157775554710804][DEFAULT][/install/installNewDB.php][18/Oct/28 14:14:57][18/Oct/28 14:14:58][took 1.262271 secs]
+[>>][5bd5c4f047add645666525][DEFAULT][/index.php][18/Oct/28 14:17:20]
+[<<][5bd5c4f047add645666525][DEFAULT][/index.php][18/Oct/28 14:17:20][18/Oct/28 14:17:20][took 0.006887 secs]
+[>>][5bd5c4f062cde891601325][DEFAULT][/login.php][18/Oct/28 14:17:20]
+[<<][5bd5c4f062cde891601325][DEFAULT][/login.php][18/Oct/28 14:17:20][18/Oct/28 14:17:20][took 0.007809 secs]
+[>>][5bd5c4f06813f895653710][DEFAULT][/login.php][18/Oct/28 14:17:20]
+[<<][5bd5c4f06813f895653710][DEFAULT][/login.php][18/Oct/28 14:17:20][18/Oct/28 14:17:20][took 0.14325 secs]
+[>>][5bd5c4fa16b37870348855][DEFAULT][/login.php][18/Oct/28 14:17:30]
+[<<][5bd5c4fa16b37870348855][DEFAULT][/login.php][18/Oct/28 14:17:30][18/Oct/28 14:17:30][took 0.014029 secs]
+[>>][5bd5c4fa1c3d9655489187][DEFAULT][/login.php][18/Oct/28 14:17:30]
+[<<][5bd5c4fa1c3d9655489187][DEFAULT][/login.php][18/Oct/28 14:17:30][18/Oct/28 14:17:30][took 0.005095 secs]
+[>>][5bd5c4fa1f82f298093552][DEFAULT][/login.php][18/Oct/28 14:17:30]
+[>>][5bd5c4fa3ad23543126774][DEFAULT][/index.php][18/Oct/28 14:17:30]
+[>>][5bd5c4fa61158920775237][DEFAULT][/lib/general/navBar.php][18/Oct/28 14:17:30]
+[>>][5bd5c4fa611aa756497867][DEFAULT][/lib/general/mainPage.php][18/Oct/28 14:17:30]
+[>>][5bd5c4fac06a9467523051][DEFAULT][/lib/project/projectEdit.php][18/Oct/28 14:17:30]
+[>>][5bd5c5078d7ec707389629][DEFAULT][/lib/project/projectEdit.php][18/Oct/28 14:17:43]
+[>>][5bd5c50817dc1055225127][DEFAULT][/lib/general/navBar.php][18/Oct/28 14:17:44]
+[>>][5bd5c50dee8a9239175269][DEFAULT][/index.php][18/Oct/28 14:17:49]
+[>>][5bd5c50e0ee33920065904][DEFAULT][/lib/general/navBar.php][18/Oct/28 14:17:50]
+[>>][5bd5c50e0f469176317986][DEFAULT][/lib/general/mainPage.php][18/Oct/28 14:17:50]
+[>>][5bd5c5f7158b7755667168][DEFAULT][/index.php][18/Oct/28 14:21:43]
+[>>][5bd5c5f754acf724299692][DEFAULT][/lib/general/navBar.php][18/Oct/28 14:21:43]
+[>>][5bd5c5f755279623256609][DEFAULT][/lib/general/mainPage.php][18/Oct/28 14:21:43]
+[>>][5bd5c5fd835e5608055267][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 14:21:49]
+[>>][5bd5c5fda95a1264391020][DEFAULT][/lib/testcases/listTestCases.php][18/Oct/28 14:21:49]
+[>>][5bd5c5fda97a6521273271][DEFAULT][/lib/testcases/archiveData.php][18/Oct/28 14:21:49]
+[>>][5bd5c5fec6335487405357][DEFAULT][/lib/ajax/gettprojectnodes.php][18/Oct/28 14:21:50]
+[>>][5bd5c600ac0f0596240747][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 14:21:52]
+[>>][5bd5c600c7117267251230][DEFAULT][/lib/requirements/reqSpecListTree.php][18/Oct/28 14:21:52]
+[>>][5bd5c600c735a619902001][DEFAULT][/lib/project/project_req_spec_mgmt.php][18/Oct/28 14:21:52]
+[>>][5bd5c60116dac626452872][DEFAULT][/lib/ajax/getrequirementnodes.php][18/Oct/28 14:21:53]
+[>>][5bd5c60237953253005310][DEFAULT][/index.php][18/Oct/28 14:21:54]
+[>>][5bd5c602503a6758005970][DEFAULT][/lib/general/navBar.php][18/Oct/28 14:21:54]
+[>>][5bd5c602505a8136397878][DEFAULT][/lib/general/mainPage.php][18/Oct/28 14:21:54]
