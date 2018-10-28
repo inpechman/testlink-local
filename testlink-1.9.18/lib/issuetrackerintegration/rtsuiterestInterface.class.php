@@ -5,6 +5,7 @@
  * Date: 10/25/2018
  * Time: 1:40 PM
  */
+//require_once ('../../third_party/Zend/Http/Client.php');
 class rtsuiterestInterface extends issueTrackerInterface
 {
 
@@ -58,6 +59,7 @@ class rtsuiterestInterface extends issueTrackerInterface
 
     public function addIssue($summary,$description,$opt){
         error_log('sdbg');
+//        $request = new Zend_Http_Client('localhost:3333');
 //        $req = new Zend_Http_Client('http://localhost:3333');
 //        try {
 //            $req->setRawData(json_encode(array('userid'=>$opt->tag)));

@@ -1612,3 +1612,136 @@ Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlin
 [<<][5bd5d42af3408264386634][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:22:18][18/Oct/28 15:22:19][took 0.018759 secs]
 [>>][5bd5d42b091e6089389304][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:22:19]
 [<<][5bd5d42b091e6089389304][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:22:19][18/Oct/28 15:22:19][took 0.062613 secs]
+[<<][5bd5d4aa86ee3910182682][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:24:26][18/Oct/28 15:24:26][took 0.013856 secs]
+[>>][5bd5d4aa8dd38713963347][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:24:26]
+[<<][5bd5d4aa8dd38713963347][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:24:26][18/Oct/28 15:24:26][took 0.018684 secs]
+[>>][5bd5d4aa95c27130296576][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:24:26]
+	[18/Oct/28 15:24:26][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+	[18/Oct/28 15:24:26][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+count(): Parameter must be an array or an object that implements Countable - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\exec.inc.php - Line 144
+[<<][5bd5d4aa95c27130296576][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:24:26][18/Oct/28 15:24:29][took 3.194386 secs]
+[<<][5bd5d52b929f9353805851][DEFAULT][/index.php][18/Oct/28 15:26:35][18/Oct/28 15:26:38][took 2.638438 secs]
+[>>][5bd5d52e3d870923176469][DEFAULT][/index.php][18/Oct/28 15:26:38]
+[<<][5bd5d52e3d870923176469][DEFAULT][/index.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.010604 secs]
+[<<][5bd5d52e631bd498627180][DEFAULT][/lib/general/navBar.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.027382 secs]
+[>>][5bd5d52e6e2f7044492307][DEFAULT][/lib/general/navBar.php][18/Oct/28 15:26:38]
+[<<][5bd5d52e6e2f7044492307][DEFAULT][/lib/general/navBar.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.021088 secs]
+[>>][5bd5d52e78679770473690][DEFAULT][/lib/general/navBar.php][18/Oct/28 15:26:38]
+[<<][5bd5d52e78679770473690][DEFAULT][/lib/general/navBar.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.037783 secs]
+[<<][5bd5d52e9408c392196484][DEFAULT][/lib/general/mainPage.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.013195 secs]
+[>>][5bd5d52e9e20a644376247][DEFAULT][/lib/general/mainPage.php][18/Oct/28 15:26:38]
+[<<][5bd5d52e9e20a644376247][DEFAULT][/lib/general/mainPage.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.011598 secs]
+[>>][5bd5d52ea7214969344800][DEFAULT][/lib/general/mainPage.php][18/Oct/28 15:26:38]
+[<<][5bd5d52ea7214969344800][DEFAULT][/lib/general/mainPage.php][18/Oct/28 15:26:38][18/Oct/28 15:26:38][took 0.041168 secs]
+[<<][5bd5d5310782b632128121][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.020638 secs]
+[>>][5bd5d53112aa3038972839][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 15:26:41]
+[<<][5bd5d53112aa3038972839][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.02017 secs]
+[>>][5bd5d5311a81d078198565][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 15:26:41]
+[<<][5bd5d5311a81d078198565][DEFAULT][/lib/general/frmWorkArea.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.067115 secs]
+[<<][5bd5d53155a6a386497372][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.036661 secs]
+[>>][5bd5d53162ce9251781679][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:41]
+[<<][5bd5d53162ce9251781679][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.019072 secs]
+[>>][5bd5d5316ad6b304168242][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:41]
+[<<][5bd5d5316ad6b304168242][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.076089 secs]
+[<<][5bd5d5319f309597831919][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.028807 secs]
+[>>][5bd5d531ab6ac778661865][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41]
+[<<][5bd5d531ab6ac778661865][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.02275 secs]
+[>>][5bd5d531b5edd729585808][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41]
+[<<][5bd5d531b5edd729585808][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.018045 secs]
+[<<][5bd5d531d32a0789870096][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.032183 secs]
+[>>][5bd5d531e07be477535195][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41]
+[<<][5bd5d531e07be477535195][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.019589 secs]
+[>>][5bd5d531e8574565097925][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41]
+[<<][5bd5d531e8574565097925][DEFAULT][/lib/execute/execDashboard.php][18/Oct/28 15:26:41][18/Oct/28 15:26:41][took 0.021486 secs]
+[<<][5bd5d5333fd0e593158226][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:43][18/Oct/28 15:26:43][took 0.024142 secs]
+[>>][5bd5d53348e27038867504][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:43]
+[<<][5bd5d53348e27038867504][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:43][18/Oct/28 15:26:43][took 0.020514 secs]
+[>>][5bd5d533510c3188588319][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:43]
+	[18/Oct/28 15:26:43][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+	[18/Oct/28 15:26:43][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\testcase.class.php - Line 8474
+	[18/Oct/28 15:26:43][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\testcase.class.php - Line 8474
+[<<][5bd5d533510c3188588319][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:43][18/Oct/28 15:26:43][took 0.163187 secs]
+[<<][5bd5d5396425e850052435][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:49][18/Oct/28 15:26:49][took 0.022553 secs]
+[>>][5bd5d5396cd37593531765][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:49]
+[<<][5bd5d5396cd37593531765][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:49][18/Oct/28 15:26:49][took 0.018872 secs]
+[>>][5bd5d53974a93298801331][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:49]
+	[18/Oct/28 15:26:49][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+	[18/Oct/28 15:26:49][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+count(): Parameter must be an array or an object that implements Countable - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\exec.inc.php - Line 144
+	[18/Oct/28 15:26:55][AUDIT][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		Test Case 'DP-1' has been executed on Build 'build_1' in the Test Plan 'TP_1'.
+	[18/Oct/28 15:26:55][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\testcase.class.php - Line 8474
+[<<][5bd5d53974a93298801331][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 15:26:49][18/Oct/28 15:26:55][took 6.187985 secs]
+[<<][5bd5d53fd3c8c704670668][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:55][18/Oct/28 15:26:55][took 0.012001 secs]
+[>>][5bd5d53fda5b0422597001][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:55]
+[<<][5bd5d53fda5b0422597001][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:55][18/Oct/28 15:26:55][took 0.008792 secs]
+[>>][5bd5d53fdfd89119123209][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:55]
+[<<][5bd5d53fdfd89119123209][DEFAULT][/lib/execute/execNavigator.php][18/Oct/28 15:26:55][18/Oct/28 15:26:55][took 0.061038 secs]
+[<<][5bd5e5a561ae3967298016][DEFAULT][/lib/attachments/attachmentupload.php][18/Oct/28 16:36:53][18/Oct/28 16:36:53][took 0.018042 secs]
+[>>][5bd5e5a56ac75953949044][DEFAULT][/lib/attachments/attachmentupload.php][18/Oct/28 16:36:53]
+[<<][5bd5e5a56ac75953949044][DEFAULT][/lib/attachments/attachmentupload.php][18/Oct/28 16:36:53][18/Oct/28 16:36:53][took 0.015678 secs]
+[>>][5bd5e5a572c09188809203][DEFAULT][/lib/attachments/attachmentupload.php][18/Oct/28 16:36:53]
+[<<][5bd5e5a572c09188809203][DEFAULT][/lib/attachments/attachmentupload.php][18/Oct/28 16:36:53][18/Oct/28 16:36:53][took 0.117552 secs]
+[<<][5bd5e5a8c7bab666959441][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:36:56][18/Oct/28 16:36:56][took 0.012395 secs]
+[>>][5bd5e5a8d1318189023675][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:36:56]
+[<<][5bd5e5a8d1318189023675][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:36:56][18/Oct/28 16:36:56][took 0.016182 secs]
+[>>][5bd5e5a8d8a99363522599][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:36:56]
+	[18/Oct/28 16:36:56][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+	[18/Oct/28 16:36:56][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\testcase.class.php - Line 8474
+[<<][5bd5e5a8d8a99363522599][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:36:56][18/Oct/28 16:36:56][took 0.101862 secs]
+[<<][5bd5e5b072157309455941][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:04][18/Oct/28 16:37:04][took 0.02329 secs]
+[>>][5bd5e5b080b7c665688309][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:04]
+[<<][5bd5e5b080b7c665688309][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:04][18/Oct/28 16:37:04][took 0.009436 secs]
+[>>][5bd5e5b0864e0533043627][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:04]
+	[18/Oct/28 16:37:04][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+[<<][5bd5e5b0864e0533043627][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:04][18/Oct/28 16:37:04][took 0.037496 secs]
+[<<][5bd5e5b9af9aa090037012][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:13][18/Oct/28 16:37:13][took 0.021822 secs]
+[>>][5bd5e5b9b9885326020656][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:13]
+[<<][5bd5e5b9b9885326020656][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:13][18/Oct/28 16:37:13][took 0.006798 secs]
+[>>][5bd5e5b9beeae331042217][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:13]
+	[18/Oct/28 16:37:13][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+	[18/Oct/28 16:37:13][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\testcase.class.php - Line 8474
+[<<][5bd5e5b9beeae331042217][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:13][18/Oct/28 16:37:13][took 0.096217 secs]
+[<<][5bd5e5c4caa29557416742][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:24][18/Oct/28 16:37:24][took 0.014824 secs]
+[>>][5bd5e5c4d7b25741411735][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:24]
+[<<][5bd5e5c4d7b25741411735][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:24][18/Oct/28 16:37:24][took 0.016602 secs]
+[>>][5bd5e5c4e18a7885604226][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:24]
+	[18/Oct/28 16:37:24][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+[<<][5bd5e5c4e18a7885604226][DEFAULT][/lib/execute/bugAdd.php][18/Oct/28 16:37:24][18/Oct/28 16:37:24][took 0.046542 secs]
+[<<][5bd5e5ca8debb851780152][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:30][18/Oct/28 16:37:30][took 0.011019 secs]
+[>>][5bd5e5ca95882485346553][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:30]
+[<<][5bd5e5ca95882485346553][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:30][18/Oct/28 16:37:30][took 0.007751 secs]
+[>>][5bd5e5ca9d1a1979497626][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:30]
+	[18/Oct/28 16:37:30][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_NOTICE
+Undefined property: stdClass::$uricreate - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\issuetrackerintegration\issueTrackerInterface.class.php - Line 420
+	[18/Oct/28 16:37:30][WARNING][v10601t6u08v13ibreb9bh9poo][GUI - Test Project ID : 1]
+		E_WARNING
+Invalid argument supplied for foreach() - in C:\Users\stu\testlink-local\testlink-1.9.18\lib\functions\testcase.class.php - Line 8474
+[<<][5bd5e5ca9d1a1979497626][DEFAULT][/lib/execute/execSetResults.php][18/Oct/28 16:37:30][18/Oct/28 16:37:30][took 0.070389 secs]
