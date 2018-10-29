@@ -13,7 +13,7 @@ class RtSuiteApiClient
     public $projectId = null;
     public $curl = '';
     public $proxy = null;
-    public $api = '/api/v1/';
+    public $api = 'api/v1';
 
     public function __construct($url, $apiKey, $projectId, $cfg = null)
     {

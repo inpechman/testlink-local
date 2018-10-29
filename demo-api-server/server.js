@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.post('/',(req,res,next)=>{
+app.post('/api/:api/projects/:id/issues',(req,res,next)=>{
+    console.log("post receved");
+    console.log(req.params);
     res.send({'status': 'ok'});
     next();
 });
