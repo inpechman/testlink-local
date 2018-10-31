@@ -342,12 +342,12 @@ $tlCfg->loggerFilter = null; // default defined on logger.class.php ;
  * Configure using custom_config.inc.php
  * @uses lib/functions/email_api.php
  */
-$g_smtp_host        = '[smtp_host_not_configured]';  # SMTP server MUST BE configured
+$g_smtp_host        = 'localhost';  # SMTP server MUST BE configured
 
 # Configure using custom_config.inc.php
-$g_tl_admin_email     = '[testlink_sysadmin_email_not_configured]'; # for problem/error notification
-$g_from_email         = '[from_email_not_configured]';  # email sender
-$g_return_path_email  = '[return_path_email_not_configured]';
+$g_tl_admin_email     = 'israelp@ravtech.co.il'; # for problem/error notification
+$g_from_email         = 'admin@testlin2.local';  # email sender
+$g_return_path_email  = 'admin@testlin2.local';
 
 /**
  * Email notification priority (low by default)
