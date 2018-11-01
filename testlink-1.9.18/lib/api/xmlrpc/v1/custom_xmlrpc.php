@@ -8,6 +8,7 @@
 
 require_once('xmlrpc.class.php');
 require_once('customAPIErrors.php');
+require_once('email_api.php');
 
 class CustomXMLRPCServer extends TestlinkXMLRPCServer
 {
@@ -15,6 +16,8 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
     public static $reqSpecTypeParamName = 'reqspectype';
     public static $requirementTypeParamName='requirementtype';
     public static $expectedCoverageParamName='expectedcoverage';
+    public static $testerIdParamName='testerid';
+    public static $testCasesParamName='testcases';
 
     /**
      * CustomXMLRPCServer constructor.
@@ -27,6 +30,7 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
             'tl.addRequirement' => 'this:addRequirement',
             'tl.editRequirement' => 'this:editRequirement',
             'tl.getReqSpecByDocId' => 'this:getReqSpecByDocId',
+            'tl.sendEmailToTester' => 'this:sendEmailToTester',
 
         );
         parent::__construct($callbacks);
@@ -162,16 +166,50 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
         return $resultInfo;
     }
 
-/*    public function editRequirement($args){
+
+    /**
+     * @param $args['devKey']
+     * @param $args['testerid']
+     * @param $args['testpalid']
+     * @param $args['testcases']: array('testcaseid',...)
+     */
+    public function sendEmailToTester($args){
         $msg_prefix = " (" . __FUNCTION__ . ") - ";
         $this->_setArgs($args);
         $checkFunctions = array('authenticate');
         $status_ok = $this->_runChecks($checkFunctions, $msg_prefix);
 
         if ($status_ok){
-            $resultInfo = $this->reqMgr->
+            $resultInfo = $this->_send_mail_to_testers($this->args[self::$testerIdParamName],
+                $this->args[self::$testProjectIDParamName],
+                $this->args[self::$testPlanIDParamName],
+                $this->args[self::$testCasesParamName]);
         }
-    }*/
+        return $resultInfo;
+    }
+
+    private function _send_mail_to_testers($testerId, $testProjectID, $testPlanID, $testCases)
+    {
+        $tester = tlUser::getByID($this->dbObj,$testerId);
+        $testerEmail = $tester->emailAddress;
+        $emailBody = <<<'EOD'
+<p>email example</p>
+EOD;
+        email_send();
+        return $testerEmail;
+    }
+
+
+    /*    public function editRequirement($args){
+            $msg_prefix = " (" . __FUNCTION__ . ") - ";
+            $this->_setArgs($args);
+            $checkFunctions = array('authenticate');
+            $status_ok = $this->_runChecks($checkFunctions, $msg_prefix);
+
+            if ($status_ok){
+                $resultInfo = $this->reqMgr->
+            }
+        }*/
 
 
 
