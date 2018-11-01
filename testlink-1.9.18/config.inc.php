@@ -283,7 +283,7 @@ $tlCfg->smarty_debug = false;
  *  for security reasons (see http://itsecuritysolutions.org/2012-08-13-TestLink-1.9.3-multiple-vulnerabilities/)
  *  put it out of reach via web or configure access denied.
  */
-$tlCfg->log_path = "C:/Users/stu/testlink-local/testlink_uploads/"; /* unix example */
+$tlCfg->log_path = '/var/testlink-ga-testlink-code/logs/'; /* unix example */
 
 
 /**
@@ -342,12 +342,12 @@ $tlCfg->loggerFilter = null; // default defined on logger.class.php ;
  * Configure using custom_config.inc.php
  * @uses lib/functions/email_api.php
  */
-$g_smtp_host        = 'localhost';  # SMTP server MUST BE configured
+$g_smtp_host        = '[smtp_host_not_configured]';  # SMTP server MUST BE configured
 
 # Configure using custom_config.inc.php
-$g_tl_admin_email     = 'israelp@ravtech.co.il'; # for problem/error notification
-$g_from_email         = 'admin@testlin2.local';  # email sender
-$g_return_path_email  = 'admin@testlin2.local';
+$g_tl_admin_email     = '[testlink_sysadmin_email_not_configured]'; # for problem/error notification
+$g_from_email         = '[from_email_not_configured]';  # email sender
+$g_return_path_email  = '[return_path_email_not_configured]';
 
 /**
  * Email notification priority (low by default)
@@ -1358,7 +1358,7 @@ $g_repositoryType = TL_REPOSITORY_TYPE_FS;
  * Put it out of reach via web or configure access denied.
  *
  **/
-$g_repositoryPath = "C:/Users/stu/testlink-local/testlink_uploads/";  /* unix example */
+$g_repositoryPath = '/var/testlink-ga-testlink-code/upload_area/';  /* unix example */
 
 /**
  * compression used within the repository
