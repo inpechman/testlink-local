@@ -180,23 +180,46 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
         $status_ok = $this->_runChecks($checkFunctions, $msg_prefix);
 
         if ($status_ok){
-            $resultInfo = $this->_send_mail_to_testers($this->args[self::$testerIdParamName],
+            $resultInfo = $this->_send_mail_to_tester($this->args[self::$testerIdParamName],
                 $this->args[self::$testProjectIDParamName],
                 $this->args[self::$testPlanIDParamName],
                 $this->args[self::$testCasesParamName]);
         }
-        return $resultInfo;
+        return array('status_ok'=>true, 'sent_to'=>$resultInfo);
     }
 
-    private function _send_mail_to_testers($testerId, $testProjectID, $testPlanID, $testCases)
+    private function _send_mail_to_tester($testerId, $testProjectID, $testPlanID, $testCases)
     {
         $tester = tlUser::getByID($this->dbObj,$testerId);
         $testerEmail = $tester->emailAddress;
-        $emailBody = <<<'EOD'
-<p>email example</p>
-EOD;
-        email_send();
+        $innerBody = $this->_generate_email_body_by_tcids($testCases);
+        $emailBody =
+"<h3>the following test cases whore assigned to you ".$tester->firstName." ".$tester->lastName." by testlink administrator</h3>".
+$innerBody;
+        email_send('admin@testlink.local',$testerEmail,'new test assignments',$emailBody,null,null,null,true);
         return $testerEmail;
+    }
+
+    private function _generate_email_body_by_tcids($testCasesIds){
+        $testCases = $this->tcaseMgr->get_by_id($testCasesIds,null);
+        $emailBody = implode(/*"<br/>",*/array_map(array($this,'_generate_single_tc_html'),$testCases));
+        $emailBodyHtml = sprintf("<table dir='ltr'><thead>
+<tr><th>test case title</th><th>summary</th><th>direct link</th></tr>
+</thead>
+<tbody>%s</tbody>
+</table>",$emailBody);
+        return $emailBodyHtml;
+    }
+
+    private function _generate_single_tc_html($testCase){
+        $_SERVER->HTTP_HOST;
+        $baseHref = sprintf("%s://%s/",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['SERVER_NAME']);
+        $directLink = $this->tcaseMgr->buildDirectWebLink($baseHref,$testCase['testcase_id']);
+        $project = $this->tprojectMgr->get_by_id($this->tcaseMgr->get_testproject($testCase['testcase_id']))['name'];
+        $testCaseHtml = sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$testCase['name'],$testCase['summary'],$directLink);
+        $preFix = $this->tprojectMgr->getTestCasePrefix($this->args[self::$testProjectIDParamName]);
+        return $testCaseHtml;
+
     }
 
 
