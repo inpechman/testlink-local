@@ -193,8 +193,12 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
         $tester = tlUser::getByID($this->dbObj,$testerId);
         $testerEmail = $tester->emailAddress;
         $innerBody = $this->_generate_email_body_by_tcids($testCases);
+        $tprojectName = $this->tprojectMgr->get_by_id($testProjectID)['name'];
+        $testPlanName = $this->tplanMgr->get_by_id($testPlanID)['name'];
         $emailBody =
-"<h3>the following test cases whore assigned to you ".$tester->firstName." ".$tester->lastName." by testlink administrator</h3>".
+"<h3>test project: ".$tprojectName."</h3><br>
+<h3>test plan: ".$testPlanName."</h3>
+<h3>the following test cases whore assigned to you ".$tester->firstName." ".$tester->lastName." by testlink administrator</h3>".
 $innerBody;
         email_send('admin@testlink.local',$testerEmail,'new test assignments',$emailBody,null,null,null,true);
         return $testerEmail;
