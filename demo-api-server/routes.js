@@ -7,6 +7,7 @@ router.get('/:api/projects/:projectid/issues/', (req, res, next) => {
     res.send([
         {
             "id": "1",
+            "iid": "1",
             "title": "issue 1",
             "description": "discription for issue 1",
             "projectid": "1",
@@ -17,10 +18,12 @@ router.get('/:api/projects/:projectid/issues/', (req, res, next) => {
                     "description": "description for note 1 on issue 1"
                 }
             ],
-            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1"
+            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1",
+            "state":"opened"
         },
         {
             "id": "2",
+            "iid": "2",
             "title": "issue 2",
             "description": "discription for issue 2",
             "projectid": "1",
@@ -31,7 +34,8 @@ router.get('/:api/projects/:projectid/issues/', (req, res, next) => {
                     "description": "description for note 1 on issue 2"
                 }
             ],
-            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/2"
+            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/2",
+            "state":"opened"
         },
     ]);
     next();
@@ -41,6 +45,7 @@ router.get('/:api//projects/', ((req, res, next) => {
     res.send([
         {
             "id": "1",
+            "iid": "1",
             "title": "issue 1",
             "description": "discription for issue 1",
             "projectid": "1",
@@ -51,10 +56,12 @@ router.get('/:api//projects/', ((req, res, next) => {
                     "description": "description for note 1 on issue 1"
                 }
             ],
-            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1"
+            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1",
+            "state":"opened"
         },
         {
             "id": "2",
+            "iid": "2",
             "title": "issue 2",
             "description": "discription for issue 2",
             "projectid": "1",
@@ -65,18 +72,20 @@ router.get('/:api//projects/', ((req, res, next) => {
                     "description": "description for note 1 on issue 2"
                 }
             ],
-            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/2"
+            "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/2",
+            "state": "opened"
         },
     ]);
     next()
 }));
 router.get('/:api//projects/:projectid', (req, res, next) => {
-    res.send({"id": "1"});
+    res.send({"iid": "1"});
     next();
 });
 router.get('/:api//projects/:projectid/issues/:issueid/', (req, res, next) => {
     res.send({
         "id": "1",
+        "iid": "1",
         "title": "issue 1",
         "description": "discription for issue 1",
         "projectid": "1",
@@ -87,7 +96,8 @@ router.get('/:api//projects/:projectid/issues/:issueid/', (req, res, next) => {
                 "description": "description for note 1 on issue 1"
             }
         ],
-        "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1"
+        "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1",
+        "state": "opened"
     });
     next();
 });
@@ -95,6 +105,7 @@ router.get('/:api//projects/:projectid/issues/:issueid/', (req, res, next) => {
 router.post('/:api//projects/:projectid/issues/', (req, res, next) => {
     res.send({
         "id": "1",
+        "iid": "1",
         "title": "issue 1",
         "description": "discription for issue 1",
         "projectid": "1",
@@ -113,6 +124,7 @@ router.post('/:api//projects/:projectid/issues/', (req, res, next) => {
 router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next) => {
     res.send({
         "id": "1",
+        "iid": "1",
         "title": "issue 1",
         "description": "discription for issue 1",
         "projectid": "1",
