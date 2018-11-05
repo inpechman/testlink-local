@@ -219,9 +219,7 @@ $innerBody;
         $_SERVER->HTTP_HOST;
         $baseHref = sprintf("%s://%s/",isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',$_SERVER['SERVER_NAME']);
         $directLink = $this->tcaseMgr->buildDirectWebLink($baseHref,$testCase['testcase_id']);
-        $project = $this->tprojectMgr->get_by_id($this->tcaseMgr->get_testproject($testCase['testcase_id']))['name'];
         $testCaseHtml = sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",$testCase['name'],$testCase['summary'],$directLink);
-        $preFix = $this->tprojectMgr->getTestCasePrefix($this->args[self::$testProjectIDParamName]);
         return $testCaseHtml;
 
     }
