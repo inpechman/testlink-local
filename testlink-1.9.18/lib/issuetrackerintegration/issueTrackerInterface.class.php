@@ -56,8 +56,9 @@ abstract class issueTrackerInterface
    * @param str $type (see tlIssueTracker.class.php $systems property)
    **/
   function __construct($type,$config,$name)
-  {
-    $this->tlCharSet = config_get('charset');
+  {        error_log("11112221111",0,TL_ABS_PATH."/testlink_logs/clog.log");
+
+      $this->tlCharSet = config_get('charset');
     $this->guiCfg = array('use_decoration' => true); // add [] on summary and statusHTMLString
     $this->name = $name;
 

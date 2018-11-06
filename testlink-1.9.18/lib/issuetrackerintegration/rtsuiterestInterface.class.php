@@ -148,6 +148,8 @@ class rtsuiterestInterface extends issueTrackerInterface
      **/
     function __construct($type,$config,$name)
     {
+        error_log("11112221111",0,TL_ABS_PATH."/testlink_logs/clog.log");
+
         $this->name = $name;
         $this->interfaceViaDB = false;
         $this->methodOpt['buildViewBugLink'] = array('addSummary' => true, 'colorByStatus' => false);
@@ -257,6 +259,7 @@ class rtsuiterestInterface extends issueTrackerInterface
      **/
     function connect()
     {
+        error_log("11112221111",0,TL_ABS_PATH."/testlink_logs/clog.log");
         $processCatch = false;
 
         try
@@ -313,8 +316,8 @@ class rtsuiterestInterface extends issueTrackerInterface
 
     function buildViewBugURL($issueID)
     {
-        $this->connected = false;
-        $this->connect();
+//        $this->connected = false;
+//        $this->connect();
         if (!$this->isConnected())
         {
             tLog(__METHOD__ . '/Not Connected ', 'ERROR');
@@ -419,10 +422,11 @@ class rtsuiterestInterface extends issueTrackerInterface
 
     public function addIssue($summary,$description,$opt=null)
     {
-
+        $testerId = $opt->tagValue->value[1];
+        $exeId = $opt->tagValue->value[0];
         try
         {
-            $op = $this->APIClient->addIssueWithInfo($summary, $description);
+            $op = $this->APIClient->addIssueWithInfo($summary, $description,$testerId,$exeId);
             if(is_null($op)){
                 throw new Exception("Error creating issue", 1);
             }
