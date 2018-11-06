@@ -31,6 +31,7 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
             'tl.editRequirement' => 'this:editRequirement',
             'tl.getReqSpecByDocId' => 'this:getReqSpecByDocId',
             'tl.sendEmailToTester' => 'this:sendEmailToTester',
+            'tl.getTestCaseByExecutionId' => 'this:getTestCaseByExecutionId',
 
         );
         parent::__construct($callbacks);
@@ -185,7 +186,20 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
                 $this->args[self::$testPlanIDParamName],
                 $this->args[self::$testCasesParamName]);
         }
+
         return array('status_ok'=>true, 'sent_to'=>$resultInfo);
+    }
+
+    public function getTestCaseByExecutionId($args)
+    {
+        $msg_prefix = " (" . __FUNCTION__ . ") - ";
+        $this->_setArgs($args);
+        $checkFunctions = array('authenticate');
+        $status_ok = $this->_runChecks($checkFunctions, $msg_prefix);
+        if ($status_ok){
+            $itemSet = $this->_get_test_case_by_execution_id($this->args[self::$executionIDParamName]);
+        }
+        return $itemSet;
     }
 
     private function _send_mail_to_tester($testerId, $testProjectID, $testPlanID, $testCases)
@@ -212,6 +226,7 @@ $innerBody;
 </thead>
 <tbody>%s</tbody>
 </table>",$emailBody);
+        
         return $emailBodyHtml;
     }
 
@@ -223,6 +238,13 @@ $innerBody;
         return $testCaseHtml;
 
     }
+
+    private function _get_test_case_by_execution_id($exeID)
+    {
+        $sql = "SELECT EXE.id, NH.parent_id FROM ".$this->tables['executions']." AS EXE JOIN ".$this->tables['nodes_hierarchy']." AS NH ON NH.id = EXE.tcversion_id WHERE EXE.id = ". intval($exeID);
+
+    }
+
 
 
     /*    public function editRequirement($args){

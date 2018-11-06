@@ -137,6 +137,7 @@ class rtsuiterestInterface extends issueTrackerInterface
     private $issueDefaults;
     private $issueOtherAttr = null; // see
     private $translate = null;
+    private $dbObj = null;
 
     var $defaultResolvedStatus;
 
@@ -146,9 +147,9 @@ class rtsuiterestInterface extends issueTrackerInterface
      * @param str $type (see tlIssueTracker.class.php $systems property)
      * @param xml $cfg
      **/
-    function __construct($type,$config,$name)
+    function __construct($type, $config, $name)
     {
-        error_log("11112221111",0,TL_ABS_PATH."/testlink_logs/clog.log");
+        error_log("11112221111", 0, TL_ABS_PATH . "/testlink_logs/clog.log");
 
         $this->name = $name;
         $this->interfaceViaDB = false;
@@ -158,8 +159,7 @@ class rtsuiterestInterface extends issueTrackerInterface
         $this->defaultResolvedStatus[] = array('code' => 3, 'verbose' => 'resolved');
         $this->defaultResolvedStatus[] = array('code' => 5, 'verbose' => 'closed');
 
-        if( !$this->setCfg($config) )
-        {
+        if (!$this->setCfg($config)) {
             return false;
         }
 
@@ -180,31 +180,25 @@ class rtsuiterestInterface extends issueTrackerInterface
      * check for configuration attributes than can be provided on
      * user configuration, but that can be considered standard.
      * If they are MISSING we will use 'these carved on the stone values'
-     * in order	to simplify configuration.
+     * in order    to simplify configuration.
      *
      *
      **/
     function completeCfg()
     {
-        $base = trim($this->cfg->uribase,"/") . '/'; // be sure no double // at end
-        if( property_exists($this->cfg,'attributes') )
-        {
+        $base = trim($this->cfg->uribase, "/") . '/'; // be sure no double // at end
+        if (property_exists($this->cfg, 'attributes')) {
             $attr = get_object_vars($this->cfg->attributes);
-            foreach ($attr as $name => $elem)
-            {
+            foreach ($attr as $name => $elem) {
                 $name = (string)$name;
-                if( is_object($elem) )
-                {
+                if (is_object($elem)) {
                     $elem = get_object_vars($elem);
                     $cc = current($elem);
                     $kk = key($elem);
-                    foreach($cc as $value)
-                    {
+                    foreach ($cc as $value) {
                         $this->issueOtherAttr[$name][] = array($kk => (string)$value);
                     }
-                }
-                else
-                {
+                } else {
                     $this->issueOtherAttr[$name] = (string)$elem;
                 }
             }
@@ -215,20 +209,18 @@ class rtsuiterestInterface extends issueTrackerInterface
         //
         // On Redmine 1 seems to be standard for Issues/Bugs
         $this->issueDefaults = array('trackerid' => 1);
-        foreach($this->issueDefaults as $prop => $default)
-        {
-            if(!isset($this->issueAttr[$prop]))
-            {
+        foreach ($this->issueDefaults as $prop => $default) {
+            if (!isset($this->issueAttr[$prop])) {
                 $this->issueAttr[$prop] = $default;
             }
         }
 
-        if( property_exists($this->cfg,'custom_fields') )
-        {
+        if (property_exists($this->cfg, 'custom_fields')) {
             $cf = $this->cfg->custom_fields;
             $this->cfg->custom_fields = (string)$cf->asXML();
         }
     }
+
     /**
      * useful for testing
      *
@@ -259,11 +251,10 @@ class rtsuiterestInterface extends issueTrackerInterface
      **/
     function connect()
     {
-        error_log("11112221111",0,TL_ABS_PATH."/testlink_logs/clog.log");
+        error_log("11112221111", 0, TL_ABS_PATH . "/testlink_logs/clog.log");
         $processCatch = false;
 
-        try
-        {
+        try {
             // CRITIC NOTICE for developers
             // $this->cfg is a simpleXML Object, then seems very conservative and safe
             // to cast properties BEFORE using it.
@@ -272,34 +263,35 @@ class rtsuiterestInterface extends issueTrackerInterface
             $projectId = (string)trim($this->cfg->projectidentifier); //TODO: check integer value
             $pxy = new stdClass();
             $pxy->proxy = config_get('proxy');
-            $this->APIClient = new rtsuite($redUrl,$redAK,$projectId, $pxy);
+            $this->APIClient = new rtsuite($redUrl, $redAK, $projectId, $pxy);
+
+
+
+//            if (!$this->dbConnection2) {
+//                $this->dbConnection2 = new database(DB_TYPE);
+//                $result = $this->dbConnection2->connect(false, DB_HOST, DB_USER,
+//                    DB_PASS, DB_NAME);
+//            }
 
             // to undestand if connection is OK, I will ask for projects.
             // I've tried to ask for users but get always ERROR from gitlab (not able to understand why).
-            try
-            {
+            try {
                 $items = $this->APIClient->getProjects();
                 $this->connected = count($items) > 0 ? true : false;
                 unset($items);
-            }
-            catch(Exception $e)
-            {
+            } catch (Exception $e) {
                 $processCatch = true;
             }
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $processCatch = true;
         }
 
-        if($processCatch)
-        {
+        if ($processCatch) {
             $logDetails = '';
-            foreach(array('uribase','apikey') as $v)
-            {
+            foreach (array('uribase', 'apikey') as $v) {
                 $logDetails .= "$v={$this->cfg->$v} / ";
             }
-            $logDetails = trim($logDetails,'/ ');
+            $logDetails = trim($logDetails, '/ ');
             $this->connected = false;
             tLog(__METHOD__ . " [$logDetails] " . $e->getMessage(), 'ERROR');
         }
@@ -318,8 +310,7 @@ class rtsuiterestInterface extends issueTrackerInterface
     {
 //        $this->connected = false;
 //        $this->connect();
-        if (!$this->isConnected())
-        {
+        if (!$this->isConnected()) {
             tLog(__METHOD__ . '/Not Connected ', 'ERROR');
             return false;
         }
@@ -332,19 +323,16 @@ class rtsuiterestInterface extends issueTrackerInterface
      **/
     public function getIssue($issueID)
     {
-        if (!$this->isConnected())
-        {
+        if (!$this->isConnected()) {
             tLog(__METHOD__ . '/Not Connected ', 'ERROR');
             return false;
         }
 
         $issue = null;
-        try
-        {
+        try {
             $jsonObj = $this->APIClient->getIssue((int)$issueID);
 
-            if( !is_null($jsonObj) && is_object($jsonObj))
-            {
+            if (!is_null($jsonObj) && is_object($jsonObj)) {
                 $issue = new stdClass();
                 $issue->IDHTMLString = "<b>{$issueID} : </b>";
                 $issue->statusCode = (string)$jsonObj->iid;
@@ -352,14 +340,12 @@ class rtsuiterestInterface extends issueTrackerInterface
                 $issue->statusHTMLString = "[$issue->statusVerbose] ";
                 $issue->summary = $issue->summaryHTMLString = (string)$jsonObj->title;
                 $issue->gitlabProject = array('name' => (string)$jsonObj->project_id,
-                    'id' => (int)$jsonObj->project_id );
+                    'id' => (int)$jsonObj->project_id);
 
                 $issue->isResolved = isset($this->state);
             }
-        }
-        catch(Exception $e)
-        {
-            tLog(__METHOD__ . '/' . $e->getMessage(),'ERROR');
+        } catch (Exception $e) {
+            tLog(__METHOD__ . '/' . $e->getMessage(), 'ERROR');
             $issue = null;
         }
         return $issue;
@@ -412,30 +398,29 @@ class rtsuiterestInterface extends issueTrackerInterface
      **/
     function checkBugIDExistence($issueID)
     {
-        if(($status_ok = $this->checkBugIDSyntax($issueID)))
-        {
+        if (($status_ok = $this->checkBugIDSyntax($issueID))) {
             $issue = $this->getIssue($issueID);
             $status_ok = is_object($issue) && !is_null($issue);
         }
         return $status_ok;
     }
 
-    public function addIssue($summary,$description,$opt=null)
+    public function addIssue($summary, $description, $opt = null)
     {
-        $testerId = $opt->tagValue->value[1];
+        $this->dbObj = new database(DB_TYPE);
+        $this->dbObj->db->SetFetchMode(ADODB_FETCH_ASSOC);
+        $this->_connectToDB();
+        $testerId = /*'ffff'*/tlUser::doesUserExist($this->dbObj, $opt->tagValue->value[1]);
         $exeId = $opt->tagValue->value[0];
-        try
-        {
-            $op = $this->APIClient->addIssueWithInfo($summary, $description,$testerId,$exeId);
-            if(is_null($op)){
+        try {
+            $op = $this->APIClient->addIssueWithInfo($summary, $description, $testerId, $exeId);
+            if (is_null($op)) {
                 throw new Exception("Error creating issue", 1);
             }
             $ret = array('status_ok' => true, 'id' => (string)$op->iid,
                 'msg' => sprintf(lang_get('gitlab_bug_created'),
                     $summary, $this->APIClient->projectId));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $msg = "Create GITLAB Ticket FAILURE => " . $e->getMessage();
             tLog($msg, 'WARNING');
             $ret = array('status_ok' => false, 'id' => -1, 'msg' => $msg . ' - serialized issue:' . serialize($issue));
@@ -447,18 +432,16 @@ class rtsuiterestInterface extends issueTrackerInterface
     /**
      *
      */
-    public function addNote($issueID,$noteText,$opt=null)
+    public function addNote($issueID, $noteText, $opt = null)
     {
         $op = $this->APIClient->addNote($issueID, $noteText);
-        if(is_null($op)){
+        if (is_null($op)) {
             throw new Exception("Error setting note", 1);
         }
         $ret = array('status_ok' => true, 'id' => (string)$op->iid,
-            'msg' => sprintf(lang_get('gitlab_bug_comment'),$op->body, $this->APIClient->projectId));
+            'msg' => sprintf(lang_get('gitlab_bug_comment'), $op->body, $this->APIClient->projectId));
         return $ret;
     }
-
-
 
 
     /**
@@ -483,6 +466,26 @@ class rtsuiterestInterface extends issueTrackerInterface
     {
         return true;
     }
+
+    protected function _connectToDB()
+    {
+        if(true == $this->testMode)
+        {
+            $this->dbObj->connect(TEST_DSN, TEST_DB_HOST, TEST_DB_USER, TEST_DB_PASS, TEST_DB_NAME);
+        }
+        else
+        {
+            $this->dbObj->connect(DSN, DB_HOST, DB_USER, DB_PASS, DB_NAME);
+        }
+        // asimon - BUGID 3644 & 2607 - $charSet was undefined here
+        $charSet = config_get('charset');
+        if((DB_TYPE == 'mysql') && ($charSet == 'UTF-8'))
+        {
+            $this->dbObj->exec_query("SET CHARACTER SET utf8");
+            $this->dbObj->exec_query("SET collation_connection = 'utf8_general_ci'");
+        }
+    }
+
 
 
 }
