@@ -197,7 +197,9 @@ class CustomXMLRPCServer extends TestlinkXMLRPCServer
         $checkFunctions = array('authenticate');
         $status_ok = $this->_runChecks($checkFunctions, $msg_prefix);
         if ($status_ok){
-            $itemSet = $this->_get_test_case_id_by_execution_id($this->args[self::$executionIDParamName]);
+            $testCaseId = $this->_get_test_case_id_by_execution_id($this->args[self::$executionIDParamName]);
+            $itemSet = $this->tcaseMgr->get_by_id($testCaseId,null)[0];
+            $itemSet['status_ok'] = true;
         }
         return $itemSet;
     }
@@ -241,7 +243,7 @@ $innerBody;
 
     private function _get_test_case_id_by_execution_id($exeID)
     {
-        $sql = "SELECT EXE.id, NH.parent_id FROM ".$this->tables['executions']." AS EXE JOIN ".$this->tables['nodes_hierarchy']." AS NH ON NH.id = EXE.tcversion_id WHERE EXE.id = ". intval($exeID);
+        $sql = "SELECT NH.parent_id FROM ".$this->tables['executions']." AS EXE JOIN ".$this->tables['nodes_hierarchy']." AS NH ON NH.id = EXE.tcversion_id WHERE EXE.id = ". intval($exeID);
         $rs = $this->dbObj->get_recordset($sql);
         return $rs[0]['parent_id'];
     }
