@@ -4,15 +4,15 @@ const xmlrpc = require('xmlrpc');
  *
  */
 class TLAPIClient {
-    _host = null;
-    _port = null;
-    _path = null;
+    // _host = null;
+    // _port = null;
+    // _path = null;
     _xmlrpc_client;
 
     constructor(host, port, path) {
-        this._host = host;
-        this._port = port;
-        this._path = path;
+        // this._host = host;
+        // this._port = port;
+        // this._path = path;
         this._xmlrpc_client = xmlrpc.createClient({host,port,path})
     }
 
