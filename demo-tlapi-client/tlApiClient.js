@@ -4,9 +4,9 @@ const xmlrpc = require('xmlrpc');
  *
  */
 class TLAPIClient {
-    _host;
-    _port;
-    _path;
+    _host = null;
+    _port = null;
+    _path = null;
     _xmlrpc_client;
 
     constructor(host, port, path) {
