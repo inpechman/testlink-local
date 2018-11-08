@@ -1,5 +1,37 @@
 const xmlrpc = require('xmlrpc');
 
-const tlClient = xmlrpc.createClient({host:'testlink2.local',port:80,path:'/lib/api/xmlrpc/v1/custom_xmlrpc.php'});
+/**
+ *
+ */
+class TLAPIClient {
+    _host;
+    _port;
+    _path;
+    _xmlrpc_client;
 
-tlClient.methodCall('getProjects',)
+    constructor(host, port, path) {
+        this._host = host;
+        this._port = port;
+        this._path = path;
+        this._xmlrpc_client = xmlrpc.createClient({host,port,path})
+    }
+
+    sendRequest(tlMethod, params){
+        return new Promise((resolve, reject) => {
+            this._xmlrpc_client.methodCall(tlMethod,[params],(error,value)=>{
+                if (error || value[0].code) {
+                    reject(error || value);
+                } else {
+                    resolve(value)
+                }
+            })
+        })
+    };
+}
+
+function createTLClient(host, port=80, path='lib/api/xmlrpc/v1/custom_xmlrpc.php'){
+    return new TLAPIClient(host,port,path)
+}
+
+
+module.exports.createTLClient = createTLClient;
