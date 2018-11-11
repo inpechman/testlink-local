@@ -411,9 +411,10 @@ class rtsuite
         return $op;
     }
 
-        public function addIssueWithInfo($title, $text, $testerId, $exeId)
+        public function addIssueWithInfo($title, $text, $testerId, $exeId, $tPlan)
     {
-        $url = "/projects/".$this->projectId."/issues?title=".urlencode($title)."&description=".urlencode($text)."&testerid=".$testerId."&exeid=".$exeId;
+        $url = "/projects/".$this->projectId."/issues?title=".urlencode($title)."&description=".urlencode($text)
+            ."&testerid=".$testerId."&exeid=".$exeId."&tpaln=".urlencode($tPlan);
         $op = $this->_request_json('POST',$url);
         return $op;
     }
