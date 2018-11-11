@@ -7,7 +7,7 @@ class TLAPIClient {
     // _host = null;
     // _port = null;
     // _path = null;
-    xmlrpc_client;
+    // xmlrpc_client;
 
     constructor(host, port, path) {
         // this._host = host;
