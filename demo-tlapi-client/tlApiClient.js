@@ -16,9 +16,13 @@ class TLAPIClient {
         this.xmlrpc_client = xmlrpc.createClient({host,port,path})
     }
 
+    setDevKey(devKey){
+        this.devKey = devKey;
+    }
+
     sendRequest(tlMethod, params){
         return new Promise((resolve, reject) => {
-            this.xmlrpc_client.methodCall(tlMethod,[params],(error, value)=>{
+            this.xmlrpc_client.methodCall(tlMethod,[{devKey:this.devKey,...params}],(error, value)=>{
                 if (error || value[0].code) {
                     reject(error || value);
                 } else {
