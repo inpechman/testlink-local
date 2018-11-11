@@ -23,7 +23,7 @@ class TLAPIClient {
     sendRequest(tlMethod, params) {
         return new Promise((resolve, reject) => {
             this.xmlrpc_client.methodCall('tl.' + tlMethod, [{devKey: this.devKey, ...params}], (error, value) => {
-                if (error || value.isArray() && value.length > 0 && value[0].code) {
+                if (error || value.isArray() && value.length > 0 && value[0].code  ) {
                     reject(error || value);
                 } else {
                     resolve(value)
