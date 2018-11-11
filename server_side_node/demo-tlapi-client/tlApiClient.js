@@ -13,13 +13,17 @@ class TLAPIClient {
         // this._host = host;
         // this._port = port;
         // this._path = path;
-        this.xmlrpc_client = xmlrpc.createClient({host,port,path})
+        this.xmlrpc_client = xmlrpc.createClient({host, port, path})
     }
 
-    sendRequest(tlMethod, params){
+    setDevKey(devKey) {
+        this.devKey = devKey;
+    }
+
+    sendRequest(tlMethod, params) {
         return new Promise((resolve, reject) => {
-            this.xmlrpc_client.methodCall(tlMethod,[params],(error, value)=>{
-                if (error || value[0].code) {
+            this.xmlrpc_client.methodCall('tl.' + tlMethod, [{devKey: this.devKey, ...params}], (error, value) => {
+                if (error || value.isArray() && value.length > 0 && value[0].code  ) {
                     reject(error || value);
                 } else {
                     resolve(value)
@@ -29,8 +33,8 @@ class TLAPIClient {
     };
 }
 
-function createTLClient(host, port=80, path='lib/api/xmlrpc/v1/custom_xmlrpc.php'){
-    return new TLAPIClient(host,port,path)
+function createTLClient(host, port = 80, path = 'lib/api/xmlrpc/v1/custom_xmlrpc.php') {
+    return new TLAPIClient(host, port, path)
 }
 
 
