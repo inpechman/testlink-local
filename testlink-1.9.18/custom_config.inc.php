@@ -38,8 +38,8 @@
 // You need to be certain that these folders have correct permissions in order
 // to allow the user/daemon used to run the webserver service/daemon read/write access.
 //
-// $tlCfg->log_path = '/var/testlink-ga-testlink-code/logs/'; /* unix example */
-// $g_repositoryPath = '/var/testlink-ga-testlink-code/upload_area/';  /* unix example */
+ $tlCfg->log_path = "C:/Users/stu/testlink-local/testlink_logs/"; /* unix example */
+ $g_repositoryPath = "C:/Users/stu/testlink-local/testlink_uploads/";  /* unix example */
 //
 // 
 // ********************************************************************************************
@@ -171,12 +171,12 @@
 //
 //
 // SMTP server Configuration ("localhost" is enough in the most cases)
-//$g_smtp_host        = 'localhost';  # SMTP server MUST BE configured  
+$g_smtp_host        = 'localhost';  # SMTP server MUST BE configured
 
 # Configure using custom_config.inc.php
-//$g_tl_admin_email     = 'tl_admin@127.0.0.1'; # for problem/error notification 
-//$g_from_email         = 'testlink@127.0.0.1';  # email sender
-//$g_return_path_email  = 'francisco@127.0.0.1';
+$g_tl_admin_email     = 'israelp@ravtech.co.il'; # for problem/error notification
+$g_from_email         = 'admin@testlin2.local';  # email sender
+$g_return_path_email  = 'admin@testlin2.local';
 
 # Urgent = 1, Not Urgent = 5, Disable = 0
 // $g_mail_priority = 5;   

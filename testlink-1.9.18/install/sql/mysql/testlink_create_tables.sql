@@ -213,7 +213,7 @@ CREATE TABLE /*prefix*/testcase_script_links (
   `branch_name` varchar(64) default NULL,
   `commit_id` varchar(40) default NULL,
   PRIMARY KEY  (`tcversion_id`,`project_key`,`repository_name`,`code_path`)
-) DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=ascii;
 
 
 CREATE TABLE /*prefix*/executions (

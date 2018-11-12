@@ -7727,7 +7727,7 @@ class build_mgr extends tlObject
    * 
    * @param resource &$db reference to database handler
    **/
-  function build_mgr(&$db)
+  function __construct(&$db)
   {
     parent::__construct();
     $this->db = &$db;
@@ -8247,7 +8247,7 @@ class milestone_mgr extends tlObject
    * 
    * @param resource &$db reference to database handler
    **/
-  function milestone_mgr(&$db)
+  function __construct(&$db)
   {
     parent::__construct();
     $this->db = &$db;

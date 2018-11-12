@@ -4,11 +4,11 @@
 # @filesource testlink_create_udf0.sql
 #
 #
-USE `YOUR_TL_DBNAME`; /* Replace before run */
+USE `testlink2`; /* Replace before run */
 DROP function IF EXISTS `UDFStripHTMLTags`;
 
 DELIMITER $$
-USE `YOUR_TL_DBNAME`$$ /* Replace before run */
+USE `testlink2`$$ /* Replace before run */
 CREATE FUNCTION `UDFStripHTMLTags`(Dirty varchar(4000)) RETURNS varchar(4000) CHARSET utf8
 BEGIN
 DECLARE iStart, iEnd, iLength int;

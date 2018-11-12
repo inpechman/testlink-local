@@ -6,7 +6,7 @@
  *
  * Base class for connection to issue tracking interfaces
  * For supporting a bug/issue tracking system this class has to be extended,
- * and all customization should be done in the subclass. 
+ * and all customization should be done in the subclass.
  *
  * ============= Issue Entity properties on TestLink Context ===================
  *
@@ -37,17 +37,17 @@ abstract class issueTrackerInterface
   var $name = null;
 
   var $tlCharSet = null;
-  
+
   // private vars don't touch
   var $dbConnection = null;  // usable only if interface is done via direct DB access.
   var $dbMsg = '';
   var $connected = false;
   var $interfaceViaDB = false;  // useful for connect/disconnect methods
   var $resolvedStatus;
-  
+
   var $methodOpt = array('buildViewBugLink' => array('addSummary' => false, 'colorByStatus' => false));
   var $guiCfg = array();
-  var $summaryLengthLimit = 120;  // Mantis max is 128.  
+  var $summaryLengthLimit = 120;  // Mantis max is 128.
 
   /**
    * Construct and connect to BTS.
@@ -62,7 +62,7 @@ abstract class issueTrackerInterface
     $this->name = $name;
 
     if( $this->setCfg($config) )
-    {     
+    {
       // useful only for integration via DB
       if( !property_exists($this->cfg,'dbcharset') )
       {
@@ -95,7 +95,7 @@ abstract class issueTrackerInterface
 
   /**
    *
-   * 
+   *
    **/
   function setCfg($xmlString)
   {
@@ -107,19 +107,19 @@ abstract class issueTrackerInterface
     {
       // Bye,Bye
       $msg = " - Issue tracker:$this->name - XML Configuration seems to be empty - please check";
-      tLog(__METHOD__ . $msg, 'ERROR');  
+      tLog(__METHOD__ . $msg, 'ERROR');
       return false;
     }
-      
+
     $this->xmlCfg = "<?xml version='1.0'?> " . $xmlString;
     libxml_use_internal_errors(true);
-    try 
+    try
     {
       $this->cfg = simplexml_load_string($this->xmlCfg);
-      if (!$this->cfg) 
+      if (!$this->cfg)
       {
         $msg = $signature . " - Failure loading XML STRING\n";
-        foreach(libxml_get_errors() as $error) 
+        foreach(libxml_get_errors() as $error)
         {
           $msg .= "\t" . $error->message;
         }
@@ -133,30 +133,30 @@ abstract class issueTrackerInterface
 
     if( !($retval = is_null($msg)) )
     {
-      tLog(__METHOD__ . $msg, 'ERROR');  
-    }  
+      tLog(__METHOD__ . $msg, 'ERROR');
+    }
 
-    // 
+    //
     if( !property_exists($this->cfg,'userinteraction') )
     {
-      $this->cfg->userinteraction = 0;  
-    }  
+      $this->cfg->userinteraction = 0;
+    }
     $this->cfg->userinteraction = intval($this->cfg->userinteraction) > 0 ? 1 : 0;
 
-    // From 
+    // From
     // http://php.net/manual/it/function.unserialize.php#112823
     //
-    // After PHP 5.3 an object made by 
-    // SimpleXML_Load_String() cannot be serialized.  
-    // An attempt to do so will result in a run-time 
-    // failure, throwing an exception.  
+    // After PHP 5.3 an object made by
+    // SimpleXML_Load_String() cannot be serialized.
+    // An attempt to do so will result in a run-time
+    // failure, throwing an exception.
     //
-    // If you store such an object in $_SESSION, 
+    // If you store such an object in $_SESSION,
     // you will get a post-execution error that says this:
-    // Fatal error: Uncaught exception 'Exception' 
-    // with message 'Serialization of 'SimpleXMLElement' 
-    // is not allowed' in [no active file]:0 
-    // Stack trace: #0 {main} thrown in [no active file] 
+    // Fatal error: Uncaught exception 'Exception'
+    // with message 'Serialization of 'SimpleXMLElement'
+    // is not allowed' in [no active file]:0
+    // Stack trace: #0 {main} thrown in [no active file]
     // on line 0
     //
     // !!!!! The entire contents of the session will be lost.
@@ -181,14 +181,14 @@ abstract class issueTrackerInterface
    */
   function getBugIDMaxLength()
   {
-    // CRITIC: 
+    // CRITIC:
     // related to execution_bugs table, you can not make it
-    // greater WITHOUT changing table structure.  
-    // 
-    return 64;  
+    // greater WITHOUT changing table structure.
+    //
+    return 64;
   }
 
-  
+
   /**
    * establishes the database connection to the bugtracking system
    *
@@ -202,9 +202,9 @@ abstract class issueTrackerInterface
     {
       return false;
     }
-       
+
     // cast everything to string in order to avoid issues
-    // @20140604 someone has been issues trying to connect to JIRA on MSSQL    
+    // @20140604 someone has been issues trying to connect to JIRA on MSSQL
     $this->cfg->dbtype = strtolower((string)$this->cfg->dbtype);
     $this->cfg->dbhost = (string)$this->cfg->dbhost;
     $this->cfg->dbuser = (string)$this->cfg->dbuser;
@@ -218,8 +218,8 @@ abstract class issueTrackerInterface
     if (!$result['status'])
     {
       $this->dbConnection = null;
-      $connection_args = "(interface: - Host:$this->cfg->dbhost - " . 
-                         "DBName: $this->cfg->dbname - User: $this->cfg->dbuser) "; 
+      $connection_args = "(interface: - Host:$this->cfg->dbhost - " .
+                         "DBName: $this->cfg->dbname - User: $this->cfg->dbuser) ";
       $msg = sprintf(lang_get('BTS_connect_to_database_fails'),$connection_args);
       tLog($msg  . $result['dbms_msg'], 'ERROR');
     }
@@ -242,7 +242,7 @@ abstract class issueTrackerInterface
 
     return $this->connected;
   }
-  
+
   /**
    * State of connection to BTS
    *
@@ -251,8 +251,8 @@ abstract class issueTrackerInterface
    **/
   function isConnected()
   {
-  
-    return ($this->connected && 
+
+    return ($this->connected &&
         ((!$this->interfaceViaDB ) || is_object($this->dbConnection)) ? 1 : 0);
   }
 
@@ -279,15 +279,15 @@ abstract class issueTrackerInterface
    **/
   function checkBugIDSyntaxNumeric($issueID)
   {
-    $valid = true;  
-    $forbidden_chars = '/\D/i';  
+    $valid = true;
+    $forbidden_chars = '/\D/i';
     if (preg_match($forbidden_chars, $issueID))
     {
-      $valid = false; 
+      $valid = false;
     }
-    else 
+    else
     {
-      $valid = (intval($issueID) > 0);  
+      $valid = (intval($issueID) > 0);
     }
     return $valid;
   }
@@ -341,7 +341,7 @@ abstract class issueTrackerInterface
       $ret->link = "TestLink Internal Message: getIssue($issueID) FAILURE on " . __METHOD__;
       return $ret;
     }
-    
+
     $useIconv = property_exists($this->cfg,'dbcharset');
     if($useIconv)
     {
@@ -351,7 +351,7 @@ abstract class issueTrackerInterface
     {
       $link .= $issue->IDHTMLString;
     }
-    
+
     if (!is_null($issue->statusHTMLString))
     {
       if($useIconv)
@@ -387,10 +387,10 @@ abstract class issueTrackerInterface
 
     if($my['opt']['colorByStatus'] && property_exists($issue,'statusColor') )
     {
-      $title = lang_get('access_to_bts');  
+      $title = lang_get('access_to_bts');
       $link = "<div  title=\"{$title}\" style=\"display: inline; background: $issue->statusColor;\">$link</div>";
     }
-    
+
     $ret = new stdClass();
     $ret->link = $link;
     $ret->isResolved = $issue->isResolved;
@@ -404,7 +404,7 @@ abstract class issueTrackerInterface
       	{
           $ret->$attr = $issue->$attr;
       	}
-      }  
+      }
     }
     return $ret;
   }
@@ -424,24 +424,24 @@ abstract class issueTrackerInterface
   /**
    * Returns URL to the bugtracking page for viewing ticket
    *
-   * @param mixed issueID 
+   * @param mixed issueID
    *        depending of BTS issueID can be a number (e.g. Mantis)
    *        or a string (e.g. JIRA)
-   * 
-   * @return string 
+   *
+   * @return string
    **/
   function buildViewBugURL($issueID)
   {
     return $this->cfg->uriview . urlencode($issueID);
   }
 
-  
+
   /**
-   * status code (always integer??) for issueID 
+   * status code (always integer??) for issueID
    *
    * @param issueID  according to BTS can be number or string
    *
-   * @return 
+   * @return
    **/
   public function getIssueStatusCode($issueID)
   {
@@ -454,8 +454,8 @@ abstract class issueTrackerInterface
    * Returns status in a readable form (HTML context) for the bug with the given id
    *
    * @param issueID  according to BTS can be number or string
-   * 
-   * @return string 
+   *
+   * @return string
    *
    **/
   function getIssueStatusVerbose($issueID)
@@ -463,13 +463,13 @@ abstract class issueTrackerInterface
     $issue = $this->getIssue($issueID);
     return (!is_null($issue) && is_object($issue))? $issue->statusVerbose : false;
   }
-  
+
 
 
   /**
    *
    * @param issueID  according to BTS can be number or string
-   * 
+   *
    * @return string returns the bug summary if bug is found, else null
    **/
   function getIssueSummary($issueID)
@@ -481,7 +481,7 @@ abstract class issueTrackerInterface
 
   // How to Force Extending class to define this STATIC method ?
   // KO abstract public static function getCfgTemplate();
-  public static function getCfgTemplate() 
+  public static function getCfgTemplate()
   {
     throw new RuntimeException("Unimplemented - YOU must implement it in YOUR interface Class");
   }
@@ -519,7 +519,7 @@ abstract class issueTrackerInterface
     }
     $this->resolvedStatus->byName = array_flip($this->resolvedStatus->byCode);
   }
-  
+
   /**
    *
    **/
@@ -527,10 +527,10 @@ abstract class issueTrackerInterface
   {
     return $this->resolvedStatus;
   }
- 
+
   /**
    * Returns the status of the bug with the given id
-   * this function is not directly called by TestLink. 
+   * this function is not directly called by TestLink.
    *
    * @return string returns the status of the given bug (if found in the db), or false else
    **/
@@ -567,7 +567,7 @@ abstract class issueTrackerInterface
     $str = $statusCode;
     if($this->guiCfg['use_decoration'])
     {
-      $str = "[" . $str . "] "; 
+      $str = "[" . $str . "] ";
     }
     return $str;
   }
@@ -576,7 +576,7 @@ abstract class issueTrackerInterface
    * return the maximum length in chars of a issue summary
    * used on TestLink GUI
    *
-   * @return int 
+   * @return int
    */
   function getBugSummaryMaxLength()
   {
