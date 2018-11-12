@@ -96,6 +96,25 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
 }
 
 
+async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, projectName) {
+    let res = await axios.default.get(urlSpec);
+    let requirements = res.data.subjects[reqSpecIndex].requirements;
+    for (let i = 0; i < requirements.length; i++) {
+        await createRequirement(urlAllProjects, projectName, res.data.subjects[reqSpecIndex].subjectName, requirements[i].title)
+    }
+}
+async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
+    let urlSpec = await createUrlSpec(urlAllProjects, projectName)
+    let res = await axios.default.get(urlSpec);
+    let projectNameFromApi = await res.data.projectName;
+    let allReqSpec = await res.data.subjects;
+    for (let i = 0; i < allReqSpec.length; i++) {
+        await createReqSpeq(projectNameFromApi, urlAllProjects, allReqSpec[i].subjectName)
+        await addAllRequirements(urlAllProjects, urlSpec, i, projectNameFromApi);
+    }
+}
+
+
 async function createProject(urlAllProjects, projectName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     let projectName1 = await getProjectNameFromApi(urlSpec);
@@ -104,9 +123,11 @@ async function createProject(urlAllProjects, projectName) {
         testprojectname: projectName1, testcaseprefix: testCasePrefix, notes: "defult",
         options: [1, 1, 1, 1], active: 1, public: 1
     })
+    await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
+
 }
 
-
+createProject(URL_ALL_PROJECTS, 'TRB')
 
 async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
