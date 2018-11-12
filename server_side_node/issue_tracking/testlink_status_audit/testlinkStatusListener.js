@@ -54,10 +54,6 @@ class TestLinkAuditor extends EventEmitter {
         return auditor;
     }
 
-    async _getLastExecForCase(tCaseId, tPlanId) {
-        return await this.tlClient.sendRequest('getLastExecutionResult', {testcaseid: tCaseId, tpalid: tPlanId})
-    }
-
     async _getTestCasesForTestPlan(tPlanId) {
         return await this.tlClient.sendRequest('getTestCasesForTestPlan', {testplanid: tPlanId})
     }
