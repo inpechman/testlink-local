@@ -61,12 +61,12 @@ async function createBuild(projectName, planName) {
     await client.sendRequest('createBuild', { testprojectname: projectName, testplanid: testPlanId, buildname: "build for retest plan" });
 }
 
-async function createTestPlan(projectName) {
+async function createTestPlan(projectName, testCaseName) {
     let planName = await createDate();
     try {
         await client.sendRequest('createTestPlan', { testplanname: planName, testprojectname: projectName });
         await createBuild(projectName, planName);
-        await addTestCaseToTestPlan(projectName,planName,'my test case on my test suit')
+        await addTestCaseToTestPlan(projectName, planName, testCaseName)
     }
     catch (error) {
         console.log(error);
@@ -74,5 +74,5 @@ async function createTestPlan(projectName) {
     }
 }
 
-createTestPlan("TRB")
+// createTestPlan("TRB",'my test case on my test suit')
 
