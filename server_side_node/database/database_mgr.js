@@ -14,7 +14,7 @@ const testCaseTableColumns = {
     ID: 'id',
     NAME: 'name',
     LAST_EXEC_TS: 'lastexects',
-    LAST_EXEC_STAT: 'last_exec_stat',
+    LAST_EXEC_STAT: 'last_execution_status',
     TC_EXTERNAL_ID: 'tcexternalid'
 };
 
@@ -49,9 +49,16 @@ class DataBaseMGR {
         let colExtID = testCaseTableColumns.TC_EXTERNAL_ID;
 
         return await this.exeQuery(
-            `INSERT INTO ${tn} (${colId},${colName},${colExTs},${colExStat},${colExtID}) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE ${colExTs}='${lastExecTimeStamp}'`,
+            `INSERT INTO ${tn} (${colId},${colName},${colExTs},${colExStat},${colExtID}) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ${colName}='${name}',
+             ${colExTs}='${lastExecTimeStamp}', ${colExStat}='${lastExecStat}',
+              ${colExtID}='${externalID}'`,
             [id, name, lastExecTimeStamp,lastExecStat, externalID]
         )
+    }
+
+    async getTestCaseById(id){
+        return await this.exeQuery(
+            `SELECT * FROM ${tableNames.testCases} WHERE ${tableNames.testCases}.${testCaseTableColumns.ID} = '${id}'`)
     }
 }
 
