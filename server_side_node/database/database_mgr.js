@@ -1,4 +1,6 @@
 const mysql = require('mysql');
+const fs = require('fs');
+// const readLine = require('readline');
 const constants = require('../constants/constants');
 
 const connectionDetails = {
@@ -8,17 +10,24 @@ const connectionDetails = {
     database: constants.DB_NAME
 };
 const tableNames = {
-    testCases: 'testcases'
-};
-const testCaseTableColumns = {
-    ID: 'id',
-    NAME: 'name',
-    LAST_EXEC_TS: 'lastexects',
-    LAST_EXEC_STAT: 'last_execution_status',
-    TC_EXTERNAL_ID: 'tcexternalid'
+    bugs: 'bugs',
+    bugsToBeTested: 'bugs_to_be_tested',
+    builds: 'builds',
+    projects:'projects',
+    requirements:'requirements',
+    reqSpecs:'req_specs',
+    testPlans:'test_plans',
 };
 
-console.log(Date.parse('2018-11-06 11:07:40'));
+// const testCaseTableColumns = {
+//     ID: 'id',
+//     NAME: 'name',
+//     LAST_EXEC_TS: 'lastexects',
+//     LAST_EXEC_STAT: 'last_execution_status',
+//     TC_EXTERNAL_ID: 'tcexternalid'
+// };
+
+console.log(new Date('2018-11-06 11:07:40'));
 
 class DataBaseMGR {
 
@@ -40,33 +49,41 @@ class DataBaseMGR {
         })
     }
 
-    async insertOrUpdateTestCase(id, name, lastExecTimeStamp,lastExecStat, externalID) {
-        let tn = tableNames.testCases;
-        let colId = testCaseTableColumns.ID;
-        let colName = testCaseTableColumns.NAME;
-        let colExTs = testCaseTableColumns.LAST_EXEC_TS;
-        let colExStat = testCaseTableColumns.LAST_EXEC_STAT;
-        let colExtID = testCaseTableColumns.TC_EXTERNAL_ID;
+    // async insertOrUpdateTestCase(id, name, lastExecTimeStamp, lastExecStat, externalID) {
+    //     let tn = tableNames.testCases;
+    //     let colId = testCaseTableColumns.ID;
+    //     let colName = testCaseTableColumns.NAME;
+    //     let colExTs = testCaseTableColumns.LAST_EXEC_TS;
+    //     let colExStat = testCaseTableColumns.LAST_EXEC_STAT;
+    //     let colExtID = testCaseTableColumns.TC_EXTERNAL_ID;
+    //
+    //     return await this.exeQuery(
+    //         `INSERT INTO ${tn} (${colId},${colName},${colExTs},${colExStat},${colExtID}) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ${colName}='${name}',
+    //          ${colExTs}='${lastExecTimeStamp}', ${colExStat}='${lastExecStat}',
+    //           ${colExtID}='${externalID}'`,
+    //         [id, name, lastExecTimeStamp, lastExecStat, externalID]
+    //     )
+    // }
 
-        return await this.exeQuery(
-            `INSERT INTO ${tn} (${colId},${colName},${colExTs},${colExStat},${colExtID}) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ${colName}='${name}',
-             ${colExTs}='${lastExecTimeStamp}', ${colExStat}='${lastExecStat}',
-              ${colExtID}='${externalID}'`,
-            [id, name, lastExecTimeStamp,lastExecStat, externalID]
-        )
-    }
+    // async getTestCaseById(id) {
+    //     return await this.exeQuery(
+    //         `SELECT * FROM ${tableNames.testCases} WHERE ${tableNames.testCases}.${testCaseTableColumns.ID} = '${id}'`)
+    // }
 
-    async getTestCaseById(id){
-        return await this.exeQuery(
-            `SELECT * FROM ${tableNames.testCases} WHERE ${tableNames.testCases}.${testCaseTableColumns.ID} = '${id}'`)
+    async initTables(sqlFilePath) {
+        let projectsTable = await this.exeQuery(`SHOW TABLES LIKE 'projects'`);
+        if (projectsTable[0]) {
+            console.log(projectsTable[0], 'exists');
+            return 'already exists';
+        } else {
+            console.log(projectsTable[0], 'not exists');
+            let sqlStr = fs.readFileSync(sqlFilePath).toString('utf-8');
+            console.log(sqlStr);
+            return await this.exeQuery(sqlStr)
+        }
     }
 }
 
-module.exports.createDBmgr = function (connectionDetails = {
-    host: constants.DB_HOST,
-    user: constants.DB_USER,
-    password: constants.DB_PASS,
-    database: constants.DB_NAME
-    }) {
+module.exports.createDBmgr = ((connectionDetails)=> function () {
     return new DataBaseMGR(connectionDetails);
-};
+})(connectionDetails);

@@ -6,5 +6,5 @@ const databaseClient = require("./database/databaseClient");
 (function main() {
     apiServer.startApiServer();
     testlinkStatusAuditor.test();
-    databaseClient.test();
+    databaseClient.test('');
 })();
