@@ -131,31 +131,28 @@ class DataBaseMGR {
         return await this.exeQuery(`SELECT * FROM requirements WHERE tl_requirement_id=?`, [tlReqId])
     }
 
-    async getNextAutoIdForTable(tableNmae) {
-        let tableInfo = await this.exeQuery(`SHOW TABLE STATUS LIKE ?;`, [tableNmae]);
-        return tableInfo[0].Auto_increment;
-    }
-
     async createBug(id, title, details, tlTestCaseId, tlTesterId, executionTimeStamp, executionId, executionStatus, webUrl, reportCount = 1) {
         return await this.exeQuery(`INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?,?)`,
             [id, title, details, tlTestCaseId, tlTesterId, executionTimeStamp, executionId, executionStatus, reportCount, webUrl])
     }
 
-    async getBug(bugId){
-        return await this.exeQuery(`SELECT * FROM bugs WHERE id=?`,[bugId]);
+    async getBug(bugId) {
+        return await this.exeQuery(`SELECT * FROM bugs WHERE id=?`, [bugId]);
     }
 
-    async addBugToTestingList(bugId,testCaseId,execStatus,lastExecTS,tlTestPlanId,reportCount=1){
+    async addBugToTestingList(bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount = 1) {
         return await this.exeQuery(`INSERT INTO bugs_to_be_tested (bug_id, test_case_id, execution_status, last_execution_time_stamp, test_plan_id, report_count) VALUES (?,?,?,?,?,?)`,
-            [bugId,testCaseId,execStatus,lastExecTS,tlTestPlanId,reportCount]);
+            [bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount]);
     }
 
-    async getBugFromTestingList(bugId,reportCount){
-        return await this.exeQuery(`SELECT * FROM bugs_to_be_tested WHERE bug_id=? AND report_count=?`,[bugId,reportCount])
+    async getBugFromTestingList(bugId, reportCount) {
+        return await this.exeQuery(`SELECT * FROM bugs_to_be_tested WHERE bug_id=? AND report_count=?`, [bugId, reportCount])
     }
 
-
-
+    async getNextAutoIdForTable(tableNmae) {
+        let tableInfo = await this.exeQuery(`SHOW TABLE STATUS LIKE ?;`, [tableNmae]);
+        return tableInfo[0].Auto_increment;
+    }
 
 }
 
