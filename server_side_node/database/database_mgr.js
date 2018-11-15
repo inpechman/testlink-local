@@ -20,13 +20,6 @@ const tableNames = {
     testPlans: 'test_plans',
 };
 
-// const testCaseTableColumns = {
-//     ID: 'id',
-//     NAME: 'name',
-//     LAST_EXEC_TS: 'lastexects',
-//     LAST_EXEC_STAT: 'last_execution_status',
-//     TC_EXTERNAL_ID: 'tcexternalid'
-// };
 
 console.log(new Date('2018-11-06 11:07:40'));
 
@@ -50,26 +43,6 @@ class DataBaseMGR {
         })
     }
 
-    // async insertOrUpdateTestCase(id, name, lastExecTimeStamp, lastExecStat, externalID) {
-    //     let tn = tableNames.testCases;
-    //     let colId = testCaseTableColumns.ID;
-    //     let colName = testCaseTableColumns.NAME;
-    //     let colExTs = testCaseTableColumns.LAST_EXEC_TS;
-    //     let colExStat = testCaseTableColumns.LAST_EXEC_STAT;
-    //     let colExtID = testCaseTableColumns.TC_EXTERNAL_ID;
-    //
-    //     return await this.exeQuery(
-    //         `INSERT INTO ${tn} (${colId},${colName},${colExTs},${colExStat},${colExtID}) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE ${colName}='${name}',
-    //          ${colExTs}='${lastExecTimeStamp}', ${colExStat}='${lastExecStat}',
-    //           ${colExtID}='${externalID}'`,
-    //         [id, name, lastExecTimeStamp, lastExecStat, externalID]
-    //     )
-    // }
-
-    // async getTestCaseById(id) {
-    //     return await this.exeQuery(
-    //         `SELECT * FROM ${tableNames.testCases} WHERE ${tableNames.testCases}.${testCaseTableColumns.ID} = '${id}'`)
-    // }
 
     async initTables(sqlFilePath) {
         let projectsTable = await this.exeQuery(`SHOW TABLES LIKE 'projects'`);
