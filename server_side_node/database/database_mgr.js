@@ -7,16 +7,17 @@ const connectionDetails = {
     host: constants.DB_HOST,
     user: constants.DB_USER,
     password: constants.DB_PASS,
-    database: constants.DB_NAME
+    database: constants.DB_NAME,
+    multipleStatements: true
 };
 const tableNames = {
     bugs: 'bugs',
     bugsToBeTested: 'bugs_to_be_tested',
     builds: 'builds',
-    projects:'projects',
-    requirements:'requirements',
-    reqSpecs:'req_specs',
-    testPlans:'test_plans',
+    projects: 'projects',
+    requirements: 'requirements',
+    reqSpecs: 'req_specs',
+    testPlans: 'test_plans',
 };
 
 // const testCaseTableColumns = {
@@ -82,8 +83,18 @@ class DataBaseMGR {
             return await this.exeQuery(sqlStr)
         }
     }
+
+    async createOrUpdateProject(id, tlProjectId, name) {
+        return await this.exeQuery(`INSERT INTO projects VALUES (?,?,?) ON DUPLICATE KEY UPDATE name=?`,[id,tlProjectId,name,name])
+    }
+
+    async getProject(tlProjectId){
+        return this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`[tlProjectId])
+    }
+
+
 }
 
-module.exports.createDBmgr = ((connectionDetails)=> function () {
+module.exports.createDBmgr = ((connectionDetails) => function () {
     return new DataBaseMGR(connectionDetails);
 })(connectionDetails);

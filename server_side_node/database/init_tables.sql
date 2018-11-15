@@ -44,7 +44,8 @@ CREATE TABLE bugs
   execution_time_stamp text,
   execution_id         int,
   execution_status     int,
-  report_count         int
+  report_count         int,
+  web_url              int
 );
 CREATE TABLE bugs_to_be_tested
 (
@@ -54,4 +55,5 @@ CREATE TABLE bugs_to_be_tested
   last_execution_time_stamp text,
   test_plan_id              int,
   report_count              int
-)
+);
+
