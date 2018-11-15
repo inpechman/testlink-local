@@ -1,59 +1,73 @@
-CREATE TABLE projects
+create table bugs
 (
-  id            int PRIMARY KEY,
-  tl_project_id int,
-  name          text
+  id                   int auto_increment
+    primary key,
+  title                text null,
+  details              text null,
+  test_case_id         int  null,
+  tester_id            int  null,
+  execution_time_stamp text null,
+  execution_id         int  null,
+  execution_status     int  null,
+  report_count         int  null,
+  web_url              int  null
 );
-CREATE TABLE req_specs
+
+create table bugs_to_be_tested
 (
-  id             int PRIMARY KEY,
-  tl_req_spec_id int,
-  parent_id      int,
-  name           text,
-  scope          text
+  id                        int auto_increment
+    primary key,
+  bug_id                    int  null,
+  test_case_id              int  null,
+  execution_status          text null,
+  last_execution_time_stamp text null,
+  test_plan_id              int  null,
+  report_count              int  null
 );
-CREATE TABLE requirements
+
+create table builds
 (
-  id                INT PRIMARY KEY,
-  tl_requirement_id INT,
-  name              TEXT,
-  scope             TEXT,
-  req_spec_id       INT
+  id           int auto_increment
+    primary key,
+  tl_build_id  int  null,
+  test_plan_id int  null,
+  name         text null
 );
-CREATE TABLE test_plans
+
+create table projects
 (
-  id          int PRIMARY KEY,
-  tl_tplan_id int,
-  project_id  int,
-  name        text
+  id            int auto_increment
+    primary key,
+  tl_project_id int  null,
+  name          text null
 );
-CREATE TABLE builds
+
+create table req_specs
 (
-  id           int PRIMARY KEY,
-  tl_build_id  int,
-  test_plan_id int,
-  name         text
+  id             int auto_increment
+    primary key,
+  tl_req_spec_id int  null,
+  parent_id      int  null,
+  name           text null,
+  scope          text null
 );
-CREATE TABLE bugs
+
+create table requirements
 (
-  id                   int PRIMARY KEY,
-  title                text,
-  details              text,
-  test_case_id         int,
-  tester_id            int,
-  execution_time_stamp text,
-  execution_id         int,
-  execution_status     int,
-  report_count         int,
-  web_url              int
+  id                int auto_increment
+    primary key,
+  tl_requirement_id int  null,
+  name              text null,
+  scope             text null,
+  req_spec_id       int  null
 );
-CREATE TABLE bugs_to_be_tested
+
+create table test_plans
 (
-  id                        int PRIMARY KEY,
-  test_case_id              int,
-  execution_status          text,
-  last_execution_time_stamp text,
-  test_plan_id              int,
-  report_count              int
+  id          int auto_increment
+    primary key,
+  tl_tplan_id int  null,
+  project_id  int  null,
+  name        text null
 );
 

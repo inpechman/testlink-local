@@ -11,5 +11,9 @@ module.exports.test = async function () {
     //     console.log(reason)
     // });
     let initRes = await dbMgr.initTables('./database/init_tables.sql');
-    console.log(initRes)
+    console.log(initRes);
+    let projectC = await dbMgr.createProject(54,'sdfavsf');
+    console.log(projectC);
+    let autoId = await dbMgr.getNextAutoIdForTable('projects');
+    console.log(autoId);
 };
