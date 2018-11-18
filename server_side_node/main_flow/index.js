@@ -33,11 +33,9 @@ async function createTestCasePrefix(projectName) {
     let id_cuonter = await database.getNextAutoIdForTable('projects')
     for (let i = 0; i < projectNameSplit.length; i++) {
         if (projectNameSplit[i] == " ") {
-            // NUBER_FOR_TEST_CASE_PREFIX += 1;
             return projectNameSplit[0] + projectNameSplit[i + 1] + id_cuonter;
         }
         else {
-            // NUBER_FOR_TEST_CASE_PREFIX += 1;
             return projectNameSplit[0] + id_cuonter;
         }
     }
@@ -191,6 +189,6 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
 module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-createProject(URL_ALL_PROJECTS, "IOS")
+// createProject(URL_ALL_PROJECTS, "IOS")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
 
