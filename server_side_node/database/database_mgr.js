@@ -129,6 +129,8 @@ class DataBaseMGR {
 
 }
 
-module.exports.createDBmgr = ((connectionDetails) => function () {
-    return new DataBaseMGR(connectionDetails);
+module.exports.createDBmgr = ((defaultConnectionDetails) => function (connectionDetails={}) {
+    let mergedConnectionDetails = {...defaultConnectionDetails, ...connectionDetails};
+    console.log(mergedConnectionDetails);
+    return new DataBaseMGR(mergedConnectionDetails);
 })(connectionDetails);
