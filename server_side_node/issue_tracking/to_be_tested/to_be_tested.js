@@ -1,13 +1,19 @@
 const tlApiClient = require('../../demo-tlapi-client/tlApiClient');
 var client = tlApiClient.createTLClient('testlink2.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php');
-client.setDevKey("20b497c0a4ae51e2869653bcca22727e")
 var getProjectIdByName = require('../../main_flow')
+client.setDevKey("20b497c0a4ae51e2869653bcca22727e")
+const db = require('../../database/database_mgr');
+
+let database = db.createDBmgr({ host: '10.2.1.105' });
+
 
 
 async function getTestPlanId(projectName, planName) {
     let testPlan = await client.sendRequest('getTestPlanByName', { testprojectname: projectName, testplanname: planName });
     return testPlan[0].id;
 }
+
+
 
 async function getTestCaseId(projectName, testCaseName) {
     let testCase = await client.sendRequest('getTestCaseIDByName', { testprojectname: projectName, testcasename: testCaseName });
@@ -38,7 +44,7 @@ async function getTestCase(projectName, testCaseID) {
 }
 
 
-async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr) {
+async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr, tester_id) {
     try {
         let projectId = await getProjectIdByName.getProjectIdByName(projectName);
         let projectPrefix = await getProjectIdByName.getProjectIdByName(projectName, true)
@@ -48,9 +54,11 @@ async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr) {
             let version = await testCase.version;
             let doTestCaseToTestPlan = await client.sendRequest('addTestCaseToTestPlan', {
                 testprojectid: projectId, testplanid: planId,
-            /*testcaseexternalid: projectPrefix + "-" + extrenalID,*/testcaseid: testCaseID_Arr[i], version: parseInt(version)
+                testcaseid: testCaseID_Arr[i], version: parseInt(version)
             });
         }
+
+        client.sendRequest('sendEmailToTester', { testerid: tester_id, testplanid: planId, testcases: testCaseID_Arr })
     } catch (error) {
         console.log(error);
 
@@ -66,18 +74,26 @@ async function createDate() {
 }
 
 async function createBuild(projectName, planName) {
+    let buildName = "build for retest plan";
     let testPlanId = await getTestPlanId(projectName, planName);
-    await client.sendRequest('createBuild', { testprojectname: projectName, testplanid: testPlanId, buildname: "build for retest plan" });
+    let new_test_build = await client.sendRequest('createBuild', { testprojectname: projectName, testplanid: testPlanId, buildname: buildName });
+    database.createBuild(new_test_build[0].id, testPlanId, buildName)
+    return new_test_build[0];
 }
 
 
 
-async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID) {
+async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID, tester_id) {
     let planName = await createDate();
+    let projectId = await getProjectIdByName.getProjectIdByName(projectName);
+
     try {
-        await client.sendRequest('createTestPlan', { testplanname: planName, testprojectname: projectName });
-        await createBuild(projectName, planName);
-        await addTestCaseToTestPlan(projectName, planName, testCaseID)
+        let new_test_plan = await client.sendRequest('createTestPlan', { testplanname: planName, testprojectname: projectName });
+        console.log(new_test_plan);
+
+        database.createTestPlan(new_test_plan[0].id, projectId, planName);
+        let new_test_build = await createBuild(projectName, planName);
+        await addTestCaseToTestPlan(projectName, planName, testCaseID, tester_id)
 
     }
     catch (error) {
@@ -90,7 +106,7 @@ async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID) {
 
 
 
-create_Test_Plan_And_Add_TC_to_TP("TRB", ['564','572']);
+create_Test_Plan_And_Add_TC_to_TP("TRB", ['564', '572'], 2);
 
 
 
