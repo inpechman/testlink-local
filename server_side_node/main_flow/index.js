@@ -30,14 +30,15 @@ async function getProjectNameFromApi(urlSpec) {
 
 async function createTestCasePrefix(projectName) {
     var projectNameSplit = await projectName.trim().split("");
+    let id_cuonter = await database.getNextAutoIdForTable('projects')
     for (let i = 0; i < projectNameSplit.length; i++) {
         if (projectNameSplit[i] == " ") {
-            NUBER_FOR_TEST_CASE_PREFIX += 1;
-            return projectNameSplit[0] + projectNameSplit[i + 1] + NUBER_FOR_TEST_CASE_PREFIX;
+            // NUBER_FOR_TEST_CASE_PREFIX += 1;
+            return projectNameSplit[0] + projectNameSplit[i + 1] + id_cuonter;
         }
         else {
-            NUBER_FOR_TEST_CASE_PREFIX += 1;
-            return projectNameSplit[0] + NUBER_FOR_TEST_CASE_PREFIX;
+            // NUBER_FOR_TEST_CASE_PREFIX += 1;
+            return projectNameSplit[0] + id_cuonter;
         }
     }
 }
@@ -55,7 +56,9 @@ async function getProjectIdFromTL(projectName, option_prefix = false) {
         return getProjectId.id;
     }
 }
-// getProjectIdFromTL('TRB')
+
+
+
 async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
     let res = await axios.default.get(urlSpec);
     for (let i = 0; i < res.data.subjects.length; i++) {
@@ -89,13 +92,16 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
     for (let i = 0; i < subjects.length; i++) {
         if (subjects[i].subjectName == reqSpecName) {
             for (let x = 0; x < subjects[i].requirements.length; x++) {
-                let requirementTitle = subjects[i].requirements[x].title;
-                let requirementScope = subjects[i].requirements[x].userStory;
-                if (titleOrScope == 'title') {
-                    return requirementTitle;
-                };
-                if (titleOrScope == 'scope') {
-                    return requirementScope;
+                if (requirementName == subjects[i].requirements[x].title) {
+                    let requirementTitle = subjects[i].requirements[x].title;
+                    let requirementScope = subjects[i].requirements[x].userStory;
+                    if (titleOrScope == 'title') {
+                        return requirementTitle;
+                    };
+                    if (titleOrScope == 'scope') {
+                        return requirementScope;
+                    }
+    
                 }
             }
         }
@@ -111,6 +117,8 @@ async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, project
         await createRequirement(urlAllProjects, projectName, res.data.subjects[reqSpecIndex].subjectName, requirements[i].title)
     }
 }
+
+
 async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName)
     let res = await axios.default.get(urlSpec);
@@ -135,10 +143,8 @@ async function createProject(urlAllProjects, projectName) {
         options: [1, 1, 1, 1], active: 1, public: 1
     })
     let projectID = await getProjectIdFromTL(projectName);
-    let add_info_to_db = await database.createProject(projectID,projectName1,testCasePrefix)
-    console.log('aaaaaa ', projectID);
+    let add_info_to_db = await database.createProject(projectID, projectName1, testCasePrefix)
     await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
-
 }
 
 // createProject(URL_ALL_PROJECTS, 'TRB')
@@ -156,26 +162,35 @@ async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
         testprojectid: testProjectId,
         parentid: parentId, reqspecdocid: reqSpecDocId, title: title, scope: scope
     })
+    let add_info_to_db = await database.createReqSpec(addReqSpec.id, parentId, reqSpecDocId, scope);
+    // console.log('aaaaaaaa: ', add_info_to_db);
+
 }
 
 
 async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requirementName) {
+    console.log("cr_par " ,urlAllProjects, projectName, reqSpecDocId, requirementName);
+    
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     let testProjectId = await getProjectIdFromTL(projectName);
     let reqSpecId = await getReqSpecIdFromApi(projectName, reqSpecDocId);
     let requirementDocId = await requirementName;
     let title = await getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, reqSpecDocId, 'title');
+    console.log('title: ', title);
     let scope = await getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, reqSpecDocId, 'scope');
+    console.log('scope: ', scope);
+
     let addRequirement = await client.sendRequest('addRequirement', {
         testprojectid: testProjectId, reqspecid: reqSpecId,
         requirementdocid: requirementDocId, title: title, scope: scope,
         status: 'V', requirementtype: '3', expectedcoverage: '2'
     })
+    let add_info_to_db = database.createRequirement(addRequirement.id,title,scope,reqSpecId);
 }
 
 module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-createProject(URL_ALL_PROJECTS, "Android")
+createProject(URL_ALL_PROJECTS, "IOS")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
 
