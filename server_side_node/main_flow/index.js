@@ -1,6 +1,9 @@
 const tlApiClient = require('../demo-tlapi-client/tlApiClient');
 const axios = require('axios')
+const db = require('../database/database_mgr')
 
+
+let database = db.createDBmgr({ host: '10.2.1.105' });
 
 var client = tlApiClient.createTLClient('testlink2.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php');
 client.setDevKey("20b497c0a4ae51e2869653bcca22727e")
@@ -43,11 +46,16 @@ async function createTestCasePrefix(projectName) {
 
 
 
-async function getProjectIdFromTL(projectName) {
+async function getProjectIdFromTL(projectName, option_prefix = false) {
     let getProjectId = await client.sendRequest('getTestProjectByName', { testprojectname: projectName });
-    return getProjectId.id;
+    if (option_prefix) {
+        return getProjectId.prefix
+    }
+    if (!option_prefix) {
+        return getProjectId.id;
+    }
 }
-
+// getProjectIdFromTL('TRB')
 async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
     let res = await axios.default.get(urlSpec);
     for (let i = 0; i < res.data.subjects.length; i++) {
@@ -117,21 +125,29 @@ async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
 
 async function createProject(urlAllProjects, projectName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
+    console.log('urlSpec: ', urlSpec);
     let projectName1 = await getProjectNameFromApi(urlSpec);
+    console.log('projectName1: ', projectName1);
     let testCasePrefix = await createTestCasePrefix(projectName)
+    console.log('prefix: ', testCasePrefix);
     let createdProject = await client.sendRequest('createTestProject', {
         testprojectname: projectName1, testcaseprefix: testCasePrefix, notes: "defult",
         options: [1, 1, 1, 1], active: 1, public: 1
     })
+    let projectID = await getProjectIdFromTL(projectName);
+    let add_info_to_db = await database.createProject(projectID,projectName1,testCasePrefix)
+    console.log('aaaaaa ', projectID);
     await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
 
 }
 
-createProject(URL_ALL_PROJECTS, 'TRB')
+// createProject(URL_ALL_PROJECTS, 'TRB')
 
 async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
+
     let testProjectId = await getProjectIdFromTL(projectName);
+
     let parentId = await testProjectId;
     let reqSpecDocId = await getReqSpecDocIdFromApi(urlSpec, reqSpecName);
     let title = await reqSpecDocId;
@@ -157,8 +173,9 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
     })
 }
 
-
+module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-// createProject(URL_ALL_PROJECTS,"TRB")
+createProject(URL_ALL_PROJECTS, "Android")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
+
