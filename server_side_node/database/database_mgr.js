@@ -65,6 +65,10 @@ class DataBaseMGR {
         return this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`[tlProjectId])
     }
 
+    async getAllProjects(){
+        return await this.exeQuery(`SELECT * FROM projects`)
+    }
+
     async createTestPlan(tlPlanId, tlProjectId, name) {
         return await this.exeQuery(
             `INSERT INTO test_plans (tl_tplan_id, project_id, name) VALUES (?,?,?)`,
