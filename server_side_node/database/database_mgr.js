@@ -57,8 +57,8 @@ class DataBaseMGR {
         }
     }
 
-    async createProject(tlProjectId, name) {
-        return await this.exeQuery(`INSERT INTO projects (tl_project_id, name) VALUES (?,?) ON DUPLICATE KEY UPDATE name=?`, [tlProjectId, name, name])
+    async createProject(tlProjectId, name, prefix) {
+        return await this.exeQuery(`INSERT INTO projects (tl_project_id, name, tl_project_pre) VALUES (?,?,?) ON DUPLICATE KEY UPDATE name=?`, [tlProjectId, name,prefix, name])
     }
 
     async getProject(tlProjectId) {
