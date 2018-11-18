@@ -413,8 +413,9 @@ class rtsuiterestInterface extends issueTrackerInterface
         $testerId = /*'ffff'*/tlUser::doesUserExist($this->dbObj, $opt->tagValue->value[1]);
         $exeId = $opt->tagValue->value[0];
         $tPlan = $opt->tagValue->value[2];
+        $optJson = json_encode(array_combine($opt->tagValue->tag,$opt->tagValue->value));
         try {
-            $op = $this->APIClient->addIssueWithInfo($summary, $description, $testerId, $exeId, $tPlan);
+            $op = $this->APIClient->addIssueWithInfo($summary, $description, $testerId, $exeId, $tPlan, $optJson);
             if (is_null($op)) {
                 throw new Exception("Error creating issue", 1);
             }
