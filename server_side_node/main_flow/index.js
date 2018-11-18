@@ -43,11 +43,16 @@ async function createTestCasePrefix(projectName) {
 
 
 
-async function getProjectIdFromTL(projectName) {
+async function getProjectIdFromTL(projectName, option_prefix = false) {
     let getProjectId = await client.sendRequest('getTestProjectByName', { testprojectname: projectName });
-    return getProjectId.id;
+    if (option_prefix) {
+        return getProjectId.prefix
+    }
+    if (!option_prefix) {
+        return getProjectId.id;
+    }
 }
-
+// getProjectIdFromTL('TRB')
 async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
     let res = await axios.default.get(urlSpec);
     for (let i = 0; i < res.data.subjects.length; i++) {
@@ -127,7 +132,7 @@ async function createProject(urlAllProjects, projectName) {
 
 }
 
-createProject(URL_ALL_PROJECTS, 'TRB')
+// createProject(URL_ALL_PROJECTS, 'TRB')
 
 async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
@@ -157,7 +162,7 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
     })
 }
 
-
+module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
 // createProject(URL_ALL_PROJECTS,"TRB")
