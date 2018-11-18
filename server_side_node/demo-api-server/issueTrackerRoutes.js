@@ -119,6 +119,7 @@ router.post('/:api//projects/:projectid/issues/', (req, res, next) => {
         "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1"
     });
     console.log(req.query);
+    console.log(JSON.parse(req.query.opt)['%%EXECTS%%']);
     next();
 });
 router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next) => {
