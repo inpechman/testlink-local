@@ -1,5 +1,6 @@
 const express = require('express');
 const functions = require('../issue_tracking/functions/issueTrackerFunctions');
+const tlAPIFunctions = require('../demo-tlapi-client/tlAPIFunctions');
 
 const router = express.Router();
 
@@ -69,7 +70,13 @@ router.get('/:api//projects/:projectid/issues/:issueid/', (req, res, next) => {
     next();
 });
 
-router.post('/:api//projects/:projectid/issues/', (req, res, next) => {
+router.post('/:api//projects/:projectid/issues/', async (req, res, next) => {
+    let execId = await tlAPIFunctions.getTCByExecId(req.query.exeid);
+    console.log('execid: ',execId);
+    // functions.addIssue(
+    //     req.query.title,req.query.description,
+    //
+    //     );
     res.send({
         "id": "2",
         "iid": "2",
