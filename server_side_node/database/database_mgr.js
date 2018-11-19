@@ -108,9 +108,9 @@ class DataBaseMGR {
         return await this.exeQuery(`SELECT * FROM requirements WHERE tl_requirement_id=?`, [tlReqId])
     }
 
-    async createBug(id, title, details, tlTestCaseId, tlTesterId, executionTimeStamp, executionId, executionStatus, webUrl, reportCount = 1) {
-        return await this.exeQuery(`INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?,?)`,
-            [id, title, details, tlTestCaseId, tlTesterId, executionTimeStamp, executionId, executionStatus, reportCount, webUrl])
+    async createBug(id, title, details, tlTesterId, executionTimeStamp, executionId, executionStatus, webUrl, reportCount = 1) {
+        return await this.exeQuery(`INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?)`,
+            [id, title, details, tlTesterId, executionTimeStamp, executionId, executionStatus, reportCount, webUrl])
     }
 
     async getBug(bugId) {

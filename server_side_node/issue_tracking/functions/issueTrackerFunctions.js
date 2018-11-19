@@ -2,6 +2,7 @@ const database = require('../../database/database_mgr');
 const trelloClient = require('../trello_client/rt_trello_client');
 const tlAPIClient = require("../../demo-tlapi-client/tlApiClient");
 const constants = require('../../constants/constants');
+const tlClient = require("../../demo-tlapi-client/tlAPIFunctions");
 
 const dbMgr = database.createDBmgr();
 
@@ -27,11 +28,11 @@ module.exports = {
     addIssue: async (title, details, testerId, execTS, execId, execStatus) => {
         let bugId = await dbMgr.getNextAutoIdForTable('bugs');
         let bugFromTrello = await trelloClient.addIssue(title, details);
-        let tcId = tlAPIClient.createTLClient(constants.TL_HOST,constants.TL_PORT,
-            constants.TL_API_PATH);
+        // let tcId = await tlClient.getTCByExecId(execId);
+        // console.log('tcid: ',tcId);
         let webUrl = bugFromTrello.web_url;
-        await dbMgr.createBug(bugId, title, details, tcId, testerId, execTS, execId, execStatus, webUrl);
-        return {id: bugId, iid: bugId, web_url: webUrls}
+        await dbMgr.createBug(bugId, title, details, testerId, execTS, execId, execStatus, webUrl);
+        return {id: bugId, iid: bugId, web_url: webUrl}
 
     }
 };
