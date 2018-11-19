@@ -104,6 +104,10 @@ router.post('/:api//projects/:projectid/issues/', async (req, res, next) => {
     console.log(JSON.parse(req.query.opt)['%%EXECTS%%']);
     next();
 });
+
+router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next) => {
+    functions.addNote(req.params.issueid,req.query.body).then(value => res.send(value)).catch(reason => {res.status(404);res.send(reason)});
+});
 router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next) => {
     res.send({
         "id": "1",

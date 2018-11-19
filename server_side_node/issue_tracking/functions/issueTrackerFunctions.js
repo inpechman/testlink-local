@@ -27,12 +27,16 @@ module.exports = {
 
     addIssue: async (title, details, testerId, execTS, execId, execStatus) => {
         let bugId = await dbMgr.getNextAutoIdForTable('bugs');
-        let bugFromTrello = await trelloClient.addIssue(title, details);
+        let bugFromTrello = await trelloClient.addIssue(bugId,title, details);
         // let tcId = await tlClient.getTCByExecId(execId);
         // console.log('tcid: ',tcId);
         let webUrl = bugFromTrello.web_url;
         await dbMgr.createBug(bugId, title, details, testerId, execTS, execId, execStatus, webUrl);
         return {id: bugId, iid: bugId, web_url: webUrl}
+    },
 
+    addNote: async (bugId, details)=>{
+        let noteFromTrello = await trelloClient.addNote(bugId,details);
+        return noteFromTrello;
     }
 };
