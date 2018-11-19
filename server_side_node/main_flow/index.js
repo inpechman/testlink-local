@@ -8,11 +8,18 @@ let database = db.createDBmgr({ host: '10.2.1.105' });
 var client = tlApiClient.createTLClient('testlink2.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php');
 client.setDevKey("20b497c0a4ae51e2869653bcca22727e")
 const URL_ALL_PROJECTS = 'http://10.2.1.119:5000/api/project/allProjects';
-let NUBER_FOR_TEST_CASE_PREFIX = 0;
 
 
 
 
+/**
+ * this function gets url of all projects from Scoper API
+ * 
+ * @param {String} urlAllProjects = [{_id:int,projectNmae}] 
+ * @param {String} projectName = project name
+ * 
+ * @returns {String} url for one project 
+ */
 async function createUrlSpec(urlAllProjects, projectName) {
     var res = await axios.default.get(urlAllProjects);
     var urlSpec = "http://10.2.1.119:5000/api/userStory/allStories/"
@@ -23,20 +30,35 @@ async function createUrlSpec(urlAllProjects, projectName) {
     }
 }
 
+/**
+ *this function gets url for one project 
+
+ * @param {String} urlSpec = {projectName:"bla bla bla",subjects:[{"subjectName": "Login","subjectDescreption": "login bla",
+ * "requirements":[{"_id": "5beac2ad99688c0468b011b3","subject": "Login","title": "bla","userStory": "As a user 1: bla *3"}]}]}
+ * @returns{String} project name from scoper API
+ */
 async function getProjectNameFromApi(urlSpec) {
     var res = await axios.default.get(urlSpec);
     return res.data.projectName;
 }
 
-async function createTestCasePrefix(projectName) {
+
+/**
+ * this function gets project name and create prefix to project
+ * 
+ * @param {String} projectName 
+ * 
+ * @returns {String}project prefix
+ */
+async function createTestProjectPrefix(projectName) {
     var projectNameSplit = await projectName.trim().split("");
     let id_cuonter = await database.getNextAutoIdForTable('projects')
     for (let i = 0; i < projectNameSplit.length; i++) {
         if (projectNameSplit[i] == " ") {
-            return projectNameSplit[0] + projectNameSplit[i + 1] + id_cuonter;
+            return projectNameSplit[0] + projectNameSplit[i + 1] + "-" + id_cuonter;
         }
         else {
-            return projectNameSplit[0] + id_cuonter;
+            return projectNameSplit[0] + "-" + id_cuonter;
         }
     }
 }
@@ -99,7 +121,7 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
                     if (titleOrScope == 'scope') {
                         return requirementScope;
                     }
-    
+
                 }
             }
         }
@@ -134,7 +156,7 @@ async function createProject(urlAllProjects, projectName) {
     console.log('urlSpec: ', urlSpec);
     let projectName1 = await getProjectNameFromApi(urlSpec);
     console.log('projectName1: ', projectName1);
-    let testCasePrefix = await createTestCasePrefix(projectName)
+    let testCasePrefix = await createTestProjectPrefix(projectName)
     console.log('prefix: ', testCasePrefix);
     let createdProject = await client.sendRequest('createTestProject', {
         testprojectname: projectName1, testcaseprefix: testCasePrefix, notes: "defult",
@@ -167,8 +189,8 @@ async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
 
 
 async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requirementName) {
-    console.log("cr_par " ,urlAllProjects, projectName, reqSpecDocId, requirementName);
-    
+    console.log("cr_par ", urlAllProjects, projectName, reqSpecDocId, requirementName);
+
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     let testProjectId = await getProjectIdFromTL(projectName);
     let reqSpecId = await getReqSpecIdFromApi(projectName, reqSpecDocId);
@@ -183,12 +205,12 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
         requirementdocid: requirementDocId, title: title, scope: scope,
         status: 'V', requirementtype: '3', expectedcoverage: '2'
     })
-    let add_info_to_db = database.createRequirement(addRequirement.id,title,scope,reqSpecId);
+    let add_info_to_db = database.createRequirement(addRequirement.id, title, scope, reqSpecId);
 }
 
 module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-// createProject(URL_ALL_PROJECTS, "IOS")
+createProject(URL_ALL_PROJECTS, "Android")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
 
