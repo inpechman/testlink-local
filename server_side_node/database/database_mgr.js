@@ -58,14 +58,14 @@ class DataBaseMGR {
     }
 
     async createProject(tlProjectId, name, prefix) {
-        return await this.exeQuery(`INSERT INTO projects (tl_project_id, name, tl_project_pre) VALUES (?,?,?) ON DUPLICATE KEY UPDATE name=?`, [tlProjectId, name,prefix, name])
+        return await this.exeQuery(`INSERT INTO projects (tl_project_id, name, tl_project_pre) VALUES (?,?,?) ON DUPLICATE KEY UPDATE name=?`, [tlProjectId, name, prefix, name])
     }
 
     async getProject(tlProjectId) {
         return this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`[tlProjectId])
     }
 
-    async getAllProjects(){
+    async getAllProjects() {
         return await this.exeQuery(`SELECT * FROM projects`)
     }
 
@@ -108,9 +108,9 @@ class DataBaseMGR {
         return await this.exeQuery(`SELECT * FROM requirements WHERE tl_requirement_id=?`, [tlReqId])
     }
 
-    async createBug(id, title, details, tlTesterId, executionTimeStamp, executionId, executionStatus, webUrl, reportCount = 1) {
-        return await this.exeQuery(`INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?)`,
-            [id, title, details, tlTesterId, executionTimeStamp, executionId, executionStatus, reportCount, webUrl])
+    async createBug(bugId, projectId, title, details, tlTesterId, executionTimeStamp, executionId, executionStatus, webUrl, reportCount = 1) {
+        return await this.exeQuery(`INSERT INTO bugs VALUES (?,?,?,?,?,?,?,?,?,?)`,
+            [bugId, projectId, title, details, tlTesterId, executionTimeStamp, executionId, executionStatus, reportCount, webUrl])
     }
 
     async getBug(bugId) {
@@ -133,7 +133,7 @@ class DataBaseMGR {
 
 }
 
-module.exports.createDBmgr = ((defaultConnectionDetails) => function (connectionDetails={}) {
+module.exports.createDBmgr = ((defaultConnectionDetails) => function (connectionDetails = {}) {
     let mergedConnectionDetails = {...defaultConnectionDetails, ...connectionDetails};
     console.log(mergedConnectionDetails);
     return new DataBaseMGR(mergedConnectionDetails);
