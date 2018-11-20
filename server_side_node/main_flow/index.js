@@ -171,12 +171,12 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
 }
 
 /**
- * this function create all requirements for one req spec  
+ * this function create all requirements for one req spec from scoper API 
  * 
- * @param {String} urlAllProjects 
- * @param {String} urlSpec 
- * @param {int} reqSpecIndex 
- * @param {String} projectName 
+ * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
+ * @param {String} urlSpec url to scoper API for one project
+ * @param {int} reqSpecIndex number for index to one req spec
+ * @param {String} projectName project name
  */
 async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, projectName) {
     let res = await axios.default.get(urlSpec);
@@ -186,7 +186,13 @@ async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, project
     }
 }
 
-
+/**
+ * this function create all req spec and all requirements per project form scoper API
+ * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
+ * @param {String} projectName project name
+ * 
+ * void
+ */
 async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName)
     let res = await axios.default.get(urlSpec);
@@ -198,7 +204,13 @@ async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
     }
 }
 
-
+/**
+ * this function create new project from scoper API and create all req spec and all requirements all data from scoper API.
+ *  
+ * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
+ * @param {String} projectName project name
+ * void
+ */
 async function createProject(urlAllProjects, projectName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     console.log('urlSpec: ', urlSpec);
@@ -215,13 +227,18 @@ async function createProject(urlAllProjects, projectName) {
     await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
 }
 
-// createProject(URL_ALL_PROJECTS, 'TRB')
 
+/**
+ * this function create new requirement specifiction data drom scoper API 
+ * @param {String} projectName project name 
+ * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
+ * @param {String} reqSpecName req spec name
+ * void
+ * 
+ */
 async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
-
     let testProjectId = await getProjectIdFromTL(projectName);
-
     let parentId = await testProjectId;
     let reqSpecDocId = await getReqSpecDocIdFromApi(urlSpec, reqSpecName);
     let title = await reqSpecDocId;
@@ -231,11 +248,18 @@ async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
         parentid: parentId, reqspecdocid: reqSpecDocId, title: title, scope: scope
     })
     let add_info_to_db = await database.createReqSpec(addReqSpec.id, parentId, reqSpecDocId, scope);
-    // console.log('aaaaaaaa: ', add_info_to_db);
 
 }
 
-
+/**
+ * this function create new requirement gets data from scoper API
+ * 
+ * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
+ * @param {String} projectName project name 
+ * @param {String} reqSpecDocId requirement specifiction doc ID
+ * @param {String} requirementName requirement name
+ * void 
+ */
 async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requirementName) {
     console.log("cr_par ", urlAllProjects, projectName, reqSpecDocId, requirementName);
 
