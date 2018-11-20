@@ -62,7 +62,7 @@ class DataBaseMGR {
     }
 
     async getProject(tlProjectId) {
-        return this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`[tlProjectId])
+        return await this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`,[tlProjectId])
     }
 
     async getAllProjects() {

@@ -74,13 +74,14 @@ router.post('/:api//projects/:projectid/issues/', async (req, res, next) => {
     // let execId = await tlAPIFunctions.getTCByExecId(req.query.exeid);
     // console.log('execid: ',execId);
     let projectId = req.params['projectid'];
+    let build = JSON.parse(req.query.opt)['%%BUILD%%'];
     let title = req.query.title;
     let details = req.query.description;
     let testerId = req.query.testerid;
     let execTS = JSON.parse(req.query.opt)['%%EXECTS%%'];
     let execId = req.query.exeid;
     let execStatus = JSON.parse(req.query.opt)['%%EXECSTATUS%%'];
-    functions.addIssue(projectId, title, details, testerId, execTS, execId, execStatus).then(value => res.send(value)).catch(reason => {
+    functions.addIssue(projectId,build, title, details, testerId, execTS, execId, execStatus).then(value => res.send(value)).catch(reason => {
         res.status(404);
         res.send(reason)
     });

@@ -1,14 +1,20 @@
-import axios from "axios";
+// import axios from "axios";
+const axios = require('axios');
 
 const constants = require('../../constants/constants');
 
 const trelloBaseUrl = 'http://' + constants.trelloModule.HOST + ':' +
     constants.trelloModule.PORT + constants.trelloModule.API_PATH;
 
-module.exports.addIssue = async function (projectName, bugId, title, details) {
+module.exports.addIssue = async function (projectName,build, bugId, title, details) {
     console.log('addIssue args: ', arguments);
     // TODO: replace with real trello module communication
-    return {web_url: 'http://dummyurltobug.bugs/demo/demo'}
+    try {
+        let response = await axios.post(trelloBaseUrl + projectName + '/bugs', {bugId,build, title, details});
+        return response.data;
+    } catch (e) {
+        return {web_url: 'http://dummyurltobug.bugs/demo/demo'}
+    }
 };
 
 module.exports.addNote = async function (projectName, bugId, details) {
