@@ -7,14 +7,25 @@ const db = require('../../database/database_mgr');
 let database = db.createDBmgr({ host: '10.2.1.105' });
 
 
-
+/**
+ * this function gets test plan ID from TestLink
+ * 
+ * @param {String} projectName project name
+ * @param {String} planName plan name
+ * @returns{int}test plan ID
+ */
 async function getTestPlanId(projectName, planName) {
     let testPlan = await client.sendRequest('getTestPlanByName', { testprojectname: projectName, testplanname: planName });
     return testPlan[0].id;
 }
 
 
-
+/**
+ * this function gets test case ID from TestLink
+ * @param {String} projectName project name
+ * @param {String} testCaseName test case name
+ * @returns{int} test case ID
+ */
 async function getTestCaseId(projectName, testCaseName) {
     let testCase = await client.sendRequest('getTestCaseIDByName', { testprojectname: projectName, testcasename: testCaseName });
     console.log(testCase);
@@ -37,13 +48,32 @@ async function getTestCaseId(projectName, testCaseName) {
 //     }
 // }
 
+/**
+ * this function gets case info from TestLink
+ * 
+ * @param {String} projectName project name
+ * @param {int} testCaseID test case Id
+ * @returns{Object} all data for test case
+ * 
+ */
 async function getTestCase(projectName, testCaseID) {
     let testCase = await client.sendRequest('getTestCase', { testprojectname: projectName, testcaseid: testCaseID })
-    // console.log(testCase[0]);
+    // console.log('aaa   :', testCase[0]);
     return testCase[0];
 }
 
 
+/**
+ * this function assignment case to plan 
+ * and send email to tester with indication on bugs
+ *  
+ * @param {String} projectName project name
+ * @param {String} planName plan name
+ * @param {Arrey} testCaseID_Arr test case IDs arr ["1","22","5"] 
+ * @param {int} tester_id tester ID number
+ * void
+ *   
+ */
 async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr, tester_id) {
     try {
         let projectId = await getProjectIdByName.getProjectIdByName(projectName);
@@ -67,12 +97,21 @@ async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr, test
 }
 
 
-
+/**
+ * this function create plan name by date
+ * @returns{String} paln name
+ */
 async function createDate() {
     let fullDate = 'RETEST- ' + new Date(new Date().toString().split('GMT')[0] + ' UTC').toISOString().split('.')[0].replace('T', ' ');
     return fullDate
 }
 
+/**
+ * this function create bulid in one test plan 
+ * 
+ * @param {String} projectName project name 
+ * @param {String} planName plan name
+ */
 async function createBuild(projectName, planName) {
     let buildName = "build for retest plan";
     let testPlanId = await getTestPlanId(projectName, planName);
@@ -82,8 +121,14 @@ async function createBuild(projectName, planName) {
 }
 
 
-
-async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID, tester_id) {
+/**
+ * this function creates test plan and add test case to test plan and send email to tester on bugs
+ * 
+ * @param {String} projectName 
+ * @param {Arrey} testCasesID_arr 
+ * @param {int} tester_id 
+ */
+async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCasesID_arr, tester_id) {
     let planName = await createDate();
     let projectId = await getProjectIdByName.getProjectIdByName(projectName);
 
@@ -93,7 +138,7 @@ async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID, tester
 
         database.createTestPlan(new_test_plan[0].id, projectId, planName);
         let new_test_build = await createBuild(projectName, planName);
-        await addTestCaseToTestPlan(projectName, planName, testCaseID, tester_id)
+        await addTestCaseToTestPlan(projectName, planName, testCasesID_arr, tester_id)
 
     }
     catch (error) {
@@ -106,7 +151,7 @@ async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID, tester
 
 
 
-create_Test_Plan_And_Add_TC_to_TP("TRB", ['564', '572'], 2);
+// create_Test_Plan_And_Add_TC_to_TP("TRB", ['564', '572'], 2);
 
 
 

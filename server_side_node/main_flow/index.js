@@ -283,6 +283,6 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
 module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-createProject(URL_ALL_PROJECTS, "IOS")
+// createProject(URL_ALL_PROJECTS, "IOS")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
 
