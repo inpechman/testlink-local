@@ -66,7 +66,16 @@ async function createTestProjectPrefix(projectName) {
 
 
 
-
+/**
+ * this function get project ID or project prefix from testLink.
+ * 
+ * 
+ * @param {String} projectName project name.
+ * @param {boolean} option_prefix optional for get prefix. default param option_perfix = false. 
+ * 
+ * @returns{String} if param option_prefix = true return project prefix.
+ * @returns{String} if param option_prefix = false return project ID.
+ */
 async function getProjectIdFromTL(projectName, option_prefix = false) {
     let getProjectId = await client.sendRequest('getTestProjectByName', { testprojectname: projectName });
     if (option_prefix) {
@@ -78,7 +87,13 @@ async function getProjectIdFromTL(projectName, option_prefix = false) {
 }
 
 
-
+/**
+ * this function gets requirement specifiction doc ID from scoper API 
+ * @param {String} urlSpec url to scoper API for one project
+ * @param {String} reqSpecName requirement specifiction name
+ * 
+ * @returns{String} req spec docID
+ */
 async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
     let res = await axios.default.get(urlSpec);
     for (let i = 0; i < res.data.subjects.length; i++) {
@@ -88,6 +103,15 @@ async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
         }
     }
 }
+
+/**
+ * this function take scope for req spec from scoper API 
+ * 
+ * @param {String} urlSpec url to scoper API for one project
+ * @param {String} reqSpecName requirement specifiction name
+ * 
+ * @returns{String} scope for requirement specifiction
+ */
 async function getScopeForReqSpecFromApi(urlSpec, reqSpecName) {
     let res = await axios.default.get(urlSpec);
     for (let i = 0; i < res.data.subjects.length; i++) {
@@ -99,13 +123,30 @@ async function getScopeForReqSpecFromApi(urlSpec, reqSpecName) {
 }
 
 
-
-async function getReqSpecIdFromApi(projectName, reqSpecDocId) {
+/**
+ * 
+ * @param {String} projectName project name
+ * @param {String} reqSpecDocId requirement specifiction docID
+ * 
+ * @returns{int} requirement specifiction ID
+ */
+async function getReqSpecIdFromTestLink(projectName, reqSpecDocId) {
     let testProjectId = await getProjectIdFromTL(projectName);
     let reqSpecId = await client.sendRequest("getReqSpecByDocId", { testprojectid: testProjectId, reqspecdocid: reqSpecDocId })
     return reqSpecId.id;
 }
 
+
+/**
+ * this function take title or scope for requirement from scoper API 
+ * 
+ * @param {String} urlSpec url to scoper API for one project
+ * @param {String} requirementName requirement name 
+ * @param {String} reqSpecName req spc name 
+ * @param {String} titleOrScope "title" or "scope"
+ * @returns{String} if param titleOrScope = "title" return title for requirement
+ * if param titleOrScope = "scope" return scope for requirement
+ *  */
 async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, reqSpecName, titleOrScope) {
     let res = await axios.default.get(urlSpec);
     let subjects = res.data.subjects;
@@ -129,7 +170,14 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
 
 }
 
-
+/**
+ * this function create all requirements for one req spec  
+ * 
+ * @param {String} urlAllProjects 
+ * @param {String} urlSpec 
+ * @param {int} reqSpecIndex 
+ * @param {String} projectName 
+ */
 async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, projectName) {
     let res = await axios.default.get(urlSpec);
     let requirements = res.data.subjects[reqSpecIndex].requirements;
@@ -193,7 +241,7 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
 
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     let testProjectId = await getProjectIdFromTL(projectName);
-    let reqSpecId = await getReqSpecIdFromApi(projectName, reqSpecDocId);
+    let reqSpecId = await getReqSpecIdFromTestLink(projectName, reqSpecDocId);
     let requirementDocId = await requirementName;
     let title = await getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, reqSpecDocId, 'title');
     console.log('title: ', title);
@@ -211,6 +259,6 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
 module.exports.getProjectIdByName = getProjectIdFromTL;
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-createProject(URL_ALL_PROJECTS, "Android")
+createProject(URL_ALL_PROJECTS, "IOS")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
 
