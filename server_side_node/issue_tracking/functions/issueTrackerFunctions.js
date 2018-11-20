@@ -25,23 +25,23 @@ module.exports = {
         return {...projects};
     },
 
-    addIssue: async (projectId,title, details, testerId, execTS, execId, execStatus) => {
+    addIssue: async (projectId, title, details, testerId, execTS, execId, execStatus) => {
         let bugId = await dbMgr.getNextAutoIdForTable('bugs');
-        let bugFromTrello = await trelloClient.addIssue(bugId,title, details);
+        let bugFromTrello = await trelloClient.addIssue(bugId, title, details);
         // let tcId = await tlClient.getTCByExecId(execId);
         // console.log('tcid: ',tcId);
         let webUrl = bugFromTrello.web_url;
-        await dbMgr.createBug(bugId,projectId, title, details, testerId, execTS, execId, execStatus, webUrl);
+        await dbMgr.createBug(bugId, projectId, title, details, testerId, execTS, execId, execStatus, webUrl);
         return {id: bugId, iid: bugId, web_url: webUrl}
     },
 
-    addNote: async (bugId, details)=>{
-        let noteFromTrello = await trelloClient.addNote(bugId,details);
+    addNote: async (projectId, bugId, details) => {
+        let noteFromTrello = await trelloClient.addNote(projectId, bugId, details);
         return noteFromTrello;
     },
 
-    getBugsStatus: async (projectId)=>{
-        let [project,...rest] = await dbMgr.getProject(projectId);
+    getBugsStatus: async (projectId) => {
+        let [project, ...rest] = await dbMgr.getProject(projectId);
         let projectName = project['name'];
         let bugs = await trelloClient.getBugsStatus(projectName)
     }
