@@ -89,7 +89,7 @@ async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCaseID, tester
 
     try {
         let new_test_plan = await client.sendRequest('createTestPlan', { testplanname: planName, testprojectname: projectName });
-        console.log(new_test_plan);
+        // console.log(new_test_plan);
 
         database.createTestPlan(new_test_plan[0].id, projectId, planName);
         let new_test_build = await createBuild(projectName, planName);
