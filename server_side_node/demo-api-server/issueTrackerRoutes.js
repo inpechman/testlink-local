@@ -98,25 +98,10 @@ router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next)
     });
     next();
 });
-// router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next) => {
-//     res.send({
-//         "id": "1",
-//         "iid": "1",
-//         "title": "issue 1",
-//         "description": "discription for issue 1",
-//         "projectid": "1",
-//         "notes": [
-//             {
-//                 "id": "11",
-//                 "title": "note 1",
-//                 "description": "description for note 1 on issue 1"
-//             }
-//         ],
-//         "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1"
-//     });
-//     console.log(req.query);
-//     next();
-// });
+
+router.post('/:api/:projectName/bugs/status',(req, res, next) => {
+    functions
+});
 
 router.use((req, res, next) => {
     // console.log(req);

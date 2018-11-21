@@ -22,3 +22,10 @@ module.exports.trelloModule = {
     PORT:5555,
     API_PATH:'/api/v1/'
 };
+
+//bugs status
+module.exports.bugState = {
+    OPENED: 1,
+    TO_BE_TESTED:2,
+    DONE:3
+};

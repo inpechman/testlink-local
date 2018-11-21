@@ -47,5 +47,25 @@ module.exports = {
         let projectName = project['name'];
         let bugs = await trelloClient.getBugsStatus(projectName);
         return bugs;
+    },
+
+    handleBugStatusChange: async (bugs, min)=>{
+        let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
+        if (fixedBugs.length >= min) {
+            //TODO: add related cases to new test plan
+
+        }
     }
+};
+
+const groupBugsByState = (bugs)=>{
+    let groupedBugs = {};
+    groupedBugs[constants.bugState.OPENED]=[];
+    groupedBugs[constants.bugState.TO_BE_TESTED]=[];
+    groupedBugs[constants.bugState.DONE]=[];
+
+    for (const bug of bugs) {
+        groupedBugs[bug.state].push(bug.bugId)
+    }
+    return groupedBugs;
 };
