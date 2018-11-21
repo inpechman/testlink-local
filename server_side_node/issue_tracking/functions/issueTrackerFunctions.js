@@ -45,6 +45,7 @@ module.exports = {
     getBugsStatus: async (projectId) => {
         let [project, ...rest] = await dbMgr.getProject(projectId);
         let projectName = project['name'];
-        let bugs = await trelloClient.getBugsStatus(projectName)
+        let bugs = await trelloClient.getBugsStatus(projectName);
+        return bugs;
     }
 };
