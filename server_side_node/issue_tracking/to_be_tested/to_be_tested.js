@@ -92,7 +92,7 @@ async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr, test
     } catch (error) {
         console.log(error);
 
-    }
+    }hghtfh
 
 }
 
@@ -131,7 +131,6 @@ async function createBuild(projectName, planName) {
 async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCasesID_arr, tester_id) {
     let planName = await createDate();
     let projectId = await getProjectIdByName.getProjectIdByName(projectName);
-
     try {
         let new_test_plan = await client.sendRequest('createTestPlan', { testplanname: planName, testprojectname: projectName });
         // console.log(new_test_plan);
@@ -139,17 +138,15 @@ async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCasesID_arr, t
         database.createTestPlan(new_test_plan[0].id, projectId, planName);
         let new_test_build = await createBuild(projectName, planName);
         await addTestCaseToTestPlan(projectName, planName, testCasesID_arr, tester_id)
-
     }
     catch (error) {
         console.log(error);
-
     }
 }
 
 
 
-
+module.exports.makeRetestPlan = create_Test_Plan_And_Add_TC_to_TP;
 
 // create_Test_Plan_And_Add_TC_to_TP("TRB", ['564', '572'], 2);
 

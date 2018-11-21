@@ -204,9 +204,9 @@ async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
     }
 }
 
+
 /**
  * this function create new project from scoper API and create all req spec and all requirements all data from scoper API.
- *  
  * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
  * @param {String} projectName project name
  * void
