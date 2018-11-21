@@ -15,3 +15,17 @@ module.exports.EXEC_STAT_PASSED = 'p';
 module.exports.EXEC_STAT_FAILED = 'f';
 module.exports.EXEC_STAT_BLOCKED = 'b';
 module.exports.EXEC_STAT_NOT_RUN = 'n';
+
+//trello module
+module.exports.trelloModule = {
+    HOST:'10.2.1.110',
+    PORT:5555,
+    API_PATH:'/api/v1/'
+};
+
+//bugs status
+module.exports.bugState = {
+    OPENED: 1,
+    TO_BE_TESTED:2,
+    DONE:3
+};

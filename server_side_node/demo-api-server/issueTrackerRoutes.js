@@ -74,13 +74,14 @@ router.post('/:api//projects/:projectid/issues/', async (req, res, next) => {
     // let execId = await tlAPIFunctions.getTCByExecId(req.query.exeid);
     // console.log('execid: ',execId);
     let projectId = req.params['projectid'];
+    let build = JSON.parse(req.query.opt)['%%BUILD%%'];
     let title = req.query.title;
     let details = req.query.description;
     let testerId = req.query.testerid;
     let execTS = JSON.parse(req.query.opt)['%%EXECTS%%'];
     let execId = req.query.exeid;
     let execStatus = JSON.parse(req.query.opt)['%%EXECSTATUS%%'];
-    functions.addIssue(projectId, title, details, testerId, execTS, execId, execStatus).then(value => res.send(value)).catch(reason => {
+    functions.addIssue(projectId,build, title, details, testerId, execTS, execId, execStatus).then(value => res.send(value)).catch(reason => {
         res.status(404);
         res.send(reason)
     });
@@ -97,25 +98,10 @@ router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next)
     });
     next();
 });
-// router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next) => {
-//     res.send({
-//         "id": "1",
-//         "iid": "1",
-//         "title": "issue 1",
-//         "description": "discription for issue 1",
-//         "projectid": "1",
-//         "notes": [
-//             {
-//                 "id": "11",
-//                 "title": "note 1",
-//                 "description": "description for note 1 on issue 1"
-//             }
-//         ],
-//         "web_url": "http://localhost:3333/testlink/issuetracker/api/v1/projects/1/issues/1"
-//     });
-//     console.log(req.query);
-//     next();
-// });
+
+router.post('/:api/:projectName/bugs/status',(req, res, next) => {
+    functions
+});
 
 router.use((req, res, next) => {
     // console.log(req);

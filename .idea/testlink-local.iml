@@ -8,5 +8,6 @@
     <orderEntry type="library" name="@types/xmlrpc" level="application" />
     <orderEntry type="library" name="@types/redis" level="application" />
     <orderEntry type="library" name="@types/mysql" level="application" />
+    <orderEntry type="library" name="@types/axios-token-interceptor" level="application" />
   </component>
 </module>

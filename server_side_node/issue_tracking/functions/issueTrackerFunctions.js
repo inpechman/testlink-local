@@ -25,24 +25,47 @@ module.exports = {
         return {...projects};
     },
 
-    addIssue: async (projectId,title, details, testerId, execTS, execId, execStatus) => {
+    addIssue: async (projectId,build, title, details, testerId, execTS, execId, execStatus) => {
         let bugId = await dbMgr.getNextAutoIdForTable('bugs');
-        let bugFromTrello = await trelloClient.addIssue(bugId,title, details);
+        let [project, ...rest] = await dbMgr.getProject(projectId);
+        let projectName = project['name'];
+        let bugFromTrello = await trelloClient.addIssue(projectName,build,bugId, title, details);
         // let tcId = await tlClient.getTCByExecId(execId);
         // console.log('tcid: ',tcId);
         let webUrl = bugFromTrello.web_url;
-        await dbMgr.createBug(bugId,projectId, title, details, testerId, execTS, execId, execStatus, webUrl);
+        await dbMgr.createBug(bugId, projectId, title, details, testerId, execTS, execId, execStatus, webUrl);
         return {id: bugId, iid: bugId, web_url: webUrl}
     },
 
-    addNote: async (bugId, details)=>{
-        let noteFromTrello = await trelloClient.addNote(bugId,details);
+    addNote: async (projectId, bugId, details) => {
+        let noteFromTrello = await trelloClient.addNote(projectId, bugId, details);
         return noteFromTrello;
     },
 
-    getBugsStatus: async (projectId)=>{
-        let [project,...rest] = await dbMgr.getProject(projectId);
+    getBugsStatus: async (projectId) => {
+        let [project, ...rest] = await dbMgr.getProject(projectId);
         let projectName = project['name'];
-        let bugs = await trelloClient.getBugsStatus(projectName)
+        let bugs = await trelloClient.getBugsStatus(projectName);
+        return bugs;
+    },
+
+    handleBugStatusChange: async (bugs, min)=>{
+        let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
+        if (fixedBugs.length >= min) {
+            //TODO: add related cases to new test plan
+
+        }
     }
+};
+
+const groupBugsByState = (bugs)=>{
+    let groupedBugs = {};
+    groupedBugs[constants.bugState.OPENED]=[];
+    groupedBugs[constants.bugState.TO_BE_TESTED]=[];
+    groupedBugs[constants.bugState.DONE]=[];
+
+    for (const bug of bugs) {
+        groupedBugs[bug.state].push(bug.bugId)
+    }
+    return groupedBugs;
 };
