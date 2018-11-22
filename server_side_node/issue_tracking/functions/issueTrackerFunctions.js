@@ -52,20 +52,24 @@ module.exports = {
 
     handleBugStatusChange: async (projectName, bugs, min = 0) => {
         console.log('started');
-        let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
-        console.log('fixed bugs', fixedBugs);
-        if (fixedBugs.length >= min) {
-            //TODO: add related cases to new test plan
-            let groupedByTester = await groupBugsByTester(fixedBugs);
-            for (let [tester, bugs] of Object.entries(groupedByTester)) {
-                console.log(tester, bugs);
-                let resultOfOperation = await toBeTested.makeRetestPlan(projectName,bugs,tester);
+        try {
+            let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
+            console.log('fixed bugs', fixedBugs);
+            if (fixedBugs.length >= min) {
+                //TODO: add related cases to new test plan
+                let groupedByTester = await groupBugsByTester(fixedBugs);
+                for (let [tester, bugs] of Object.entries(groupedByTester)) {
+                    console.log(tester, bugs);
+                    let relatedCases = await findRelatedCasesForBugs(bugs);
+                    let resultOfOperation = await toBeTested.makeRetestPlan(projectName, relatedCases, tester);
+                }
             }
+            return {status_ok: true}
+        } catch (e) {
+            console.log('error in handleBugStatusChange',e)
         }
-        return {status_ok: true}
     }
 };
-
 const groupBugsByState = (bugs) => {
     console.log("group by state", bugs);
     let groupedBugs = {};
@@ -91,6 +95,32 @@ const groupBugsByTester = async (bugs = []) => {
     return groupedBugs;
 
 };
+
+const findRelatedCasesForBugs = async (bugsIds) => {
+    let bugs = await dbMgr.getBugs(bugsIds);
+    console.log('findRelatedCasesForBugs', bugs);
+
+    let executions = bugs.map((bug) => {
+        return bug.execution_id;
+    });
+    console.log(executions);
+    let testCases = await getCasesForExecutions(executions);
+    console.log(testCases);
+    return testCases;
+};
+
+const getCasesForExecutions = async (executions) => {
+    console.log('getCasesForExecutions',executions);
+    let cases = [];
+    for (const execution of executions) {
+        let testCase = await tlClient.getTCByExecId(execution);
+        console.log(testCase);
+        cases.push(testCase.testcase_id);
+    }
+    console.log('getCasesForExecutions',cases);
+    return cases;
+};
+
 
 // const bulkResolveTester = async (bugs) => {
 //     let groupedBugs = {};
