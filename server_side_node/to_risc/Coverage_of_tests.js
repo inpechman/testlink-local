@@ -11,18 +11,19 @@ async function getAlRequirementsForProject(projectName) {
 // getAlRequirementsForProject('TRB')
 
 
-async function get_expected_coverage_for_one_requirement(projectName) {
-    let exepected_coverage = [];
-    let all_requirements_for_project = getAlRequirementsForProject(projectName);
-    for (let i = 0; i < all_requirements_for_project.length; i++) {
-        let getReqByID = awaitclient.sendRequest('getReqById', {testprojectname:projectName, requirementid: all_requirements_for_project[i].id });
-        console.log(getReqByID);
+async function get_number_expected_coverage_for_project(projectName) {
 
+    let exepected_coverage = 0;
+    let all_requirements_for_project = await getAlRequirementsForProject(projectName);
+    for (let i = 0; i < all_requirements_for_project.length; i++) {
+        let getReqByID = await client.sendRequest('getReqById', { testprojectname: projectName, requirementid: all_requirements_for_project[i].id });
+        // console.log(getReqByID[0].expected_coverage);
+        exepected_coverage += parseInt(getReqByID[0].expected_coverage);
     }
+
     return exepected_coverage;
 }
 
-get_expected_coverage_for_one_requirement()
 
 async function getNumberOfCoverageForProject(projectName) {
     let all_requirements_for_project = await getAlRequirementsForProject(projectName);
@@ -31,8 +32,16 @@ async function getNumberOfCoverageForProject(projectName) {
         let coverage = await client.sendRequest('getReqCoverage', { testprojectname: projectName, requirementdocid: all_requirements_for_project[i].req_doc_id })
         numberCoverageForProject += coverage.length;
     }
-    // console.log(numberCoverageForProject);
     return numberCoverageForProject
 }
 
-// getNumberOfCoverageForProject('TRB')
+async function getPercentCoverageForProject(projectName) {
+    let numberOfCasesNeded = await get_number_expected_coverage_for_project(projectName);
+    let numberOfCoveraged = await getNumberOfCoverageForProject(projectName);
+    let onePercent = numberOfCasesNeded / 100
+    let resultInPercent = numberOfCoveraged / onePercent;
+    console.log(resultInPercent + ' %');
+    return resultInPercent;
+}
+
+getPercentCoverageForProject('demo project')
