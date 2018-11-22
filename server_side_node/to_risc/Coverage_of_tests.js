@@ -11,16 +11,18 @@ async function getAlRequirementsForProject(projectName) {
 // getAlRequirementsForProject('TRB')
 
 
-async function get_expected_coverage_for_one_requirement(projectName, requirementID) {
+async function get_expected_coverage_for_one_requirement(projectName) {
     let exepected_coverage = [];
     let all_requirements_for_project = getAlRequirementsForProject(projectName);
     for (let i = 0; i < all_requirements_for_project.length; i++) {
-        let getReqByID = awaitclient.sendRequest('getReqById', { requirementid: all_requirements_for_project[i].id });
+        let getReqByID = awaitclient.sendRequest('getReqById', {testprojectname:projectName, requirementid: all_requirements_for_project[i].id });
         console.log(getReqByID);
 
     }
     return exepected_coverage;
 }
+
+get_expected_coverage_for_one_requirement()
 
 async function getNumberOfCoverageForProject(projectName) {
     let all_requirements_for_project = await getAlRequirementsForProject(projectName);
@@ -31,7 +33,6 @@ async function getNumberOfCoverageForProject(projectName) {
     }
     // console.log(numberCoverageForProject);
     return numberCoverageForProject
-
 }
 
 // getNumberOfCoverageForProject('TRB')

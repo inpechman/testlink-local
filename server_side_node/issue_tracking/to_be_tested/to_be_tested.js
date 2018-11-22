@@ -129,6 +129,7 @@ async function createBuild(projectName, planName) {
  * @param {int} tester_id 
  */
 async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCasesID_arr, tester_id) {
+    console.log('create_Test_Plan_And_Add_TC_to_TP started ',arguments);
     let planName = await createDate();
     let projectId = await getProjectIdByName.getProjectIdByName(projectName);
     try {
