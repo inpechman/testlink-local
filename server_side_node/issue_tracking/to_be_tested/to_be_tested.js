@@ -138,6 +138,7 @@ async function create_Test_Plan_And_Add_TC_to_TP(projectName, testCasesID_arr, t
         database.createTestPlan(new_test_plan[0].id, projectId, planName);
         let new_test_build = await createBuild(projectName, planName);
         await addTestCaseToTestPlan(projectName, planName, testCasesID_arr, tester_id)
+        return new_test_plan;
     }
     catch (error) {
         console.log(error);
