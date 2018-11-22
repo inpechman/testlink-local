@@ -117,6 +117,13 @@ class DataBaseMGR {
         return await this.exeQuery(`SELECT * FROM bugs WHERE id=?`, [bugId]);
     }
 
+    async getBugByReporter(bugId){
+        console.log(bugId);
+        let bug = await this.exeQuery(`SELECT tester_id FROM bugs WHERE id=?`,[bugId]);
+        console.log(bug);
+        return bug[0].tester_id;
+    }
+
     async addBugToTestingList(bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount = 1) {
         return await this.exeQuery(`INSERT INTO bugs_to_be_tested (bug_id, test_case_id, execution_status, last_execution_time_stamp, test_plan_id, report_count) VALUES (?,?,?,?,?,?)`,
             [bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount]);

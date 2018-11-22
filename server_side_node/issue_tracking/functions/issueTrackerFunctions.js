@@ -3,6 +3,7 @@ const trelloClient = require('../trello_client/rt_trello_client');
 const tlAPIClient = require("../../demo-tlapi-client/tlApiClient");
 const constants = require('../../constants/constants');
 const tlClient = require("../../demo-tlapi-client/tlAPIFunctions");
+const toBeTested = require("../to_be_tested/to_be_tested");
 
 const dbMgr = database.createDBmgr();
 
@@ -25,11 +26,11 @@ module.exports = {
         return {...projects};
     },
 
-    addIssue: async (projectId,build, title, details, testerId, execTS, execId, execStatus) => {
+    addIssue: async (projectId, build, title, details, testerId, execTS, execId, execStatus) => {
         let bugId = await dbMgr.getNextAutoIdForTable('bugs');
         let [project, ...rest] = await dbMgr.getProject(projectId);
         let projectName = project['name'];
-        let bugFromTrello = await trelloClient.addIssue(projectName,build,bugId, title, details);
+        let bugFromTrello = await trelloClient.addIssue(projectName, build, bugId, title, details);
         // let tcId = await tlClient.getTCByExecId(execId);
         // console.log('tcid: ',tcId);
         let webUrl = bugFromTrello.web_url;
@@ -49,23 +50,56 @@ module.exports = {
         return bugs;
     },
 
-    handleBugStatusChange: async (bugs, min)=>{
+    handleBugStatusChange: async (projectName, bugs, min = 0) => {
+        console.log('started');
         let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
+        console.log('fixed bugs', fixedBugs);
         if (fixedBugs.length >= min) {
             //TODO: add related cases to new test plan
-
+            let groupedByTester = await groupBugsByTester(fixedBugs);
+            for (let [tester, bugs] of Object.entries(groupedByTester)) {
+                console.log(tester, bugs);
+                let resultOfOperation = await toBeTested.makeRetestPlan(projectName,bugs,tester);
+            }
         }
+        return {status_ok: true}
     }
 };
 
-const groupBugsByState = (bugs)=>{
+const groupBugsByState = (bugs) => {
+    console.log("group by state", bugs);
     let groupedBugs = {};
-    groupedBugs[constants.bugState.OPENED]=[];
-    groupedBugs[constants.bugState.TO_BE_TESTED]=[];
-    groupedBugs[constants.bugState.DONE]=[];
+    groupedBugs[constants.bugState.OPENED] = [];
+    groupedBugs[constants.bugState.TO_BE_TESTED] = [];
+    groupedBugs[constants.bugState.DONE] = [];
 
     for (const bug of bugs) {
         groupedBugs[bug.state].push(bug.bugId)
     }
     return groupedBugs;
 };
+
+const groupBugsByTester = async (bugs = []) => {
+    let groupedBugs = {};
+    for (const bug of bugs) {
+        let tester = await dbMgr.getBugByReporter(bug);
+        if (!groupedBugs[tester]) {
+            groupedBugs[tester] = [];
+        }
+        groupedBugs[tester].push(bug);
+    }
+    return groupedBugs;
+
+};
+
+// const bulkResolveTester = async (bugs) => {
+//     let groupedBugs = {};
+//     for (const bug of bugs) {
+//         let tester = await dbMgr.getBugByReporter(bug);
+//         if (!groupedBugs[tester]) {
+//             groupedBugs[tester] = [];
+//         }
+//         groupedBugs[tester].push(bug);
+//     }
+//     return groupedBugs;
+// };

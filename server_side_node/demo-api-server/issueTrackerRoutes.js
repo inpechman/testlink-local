@@ -100,12 +100,18 @@ router.post('/:api//projects/:projectid/issues/:issueid/notes', (req, res, next)
 });
 
 router.post('/:api/:projectName/bugs/status',(req, res, next) => {
-    functions
+    console.log('status change receve', req.body);
+    functions.handleBugStatusChange(req.params.projectName,req.body).then(value => {
+        res.send(value);
+    }).catch(reason => {
+        res.status(404);
+        res.send(reason);
+    });
 });
 
 router.use((req, res, next) => {
-    // console.log(req);
-    // console.log(res);
+    console.log(req);
+    console.log(res);
     // console.log(next);
 });
 
