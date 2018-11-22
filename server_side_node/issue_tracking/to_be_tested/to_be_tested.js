@@ -92,7 +92,7 @@ async function addTestCaseToTestPlan(projectName, planName, testCaseID_Arr, test
     } catch (error) {
         console.log(error);
 
-    }hghtfh
+    }
 
 }
 
