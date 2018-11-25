@@ -7,7 +7,7 @@ const myRouter = express.Router();
 
 myRouter.get('/:apiV/:projectName/coverage', (req, res) => {
     // console.log(req);
-    functions.getPercentCoverageForProject(req.params.projectName).then((valeu) => {
+    functions.getPercentCoverageForProject(req.params.projectName).then((valeu) => {        
         res.send({coverage:valeu});
     })
 })
