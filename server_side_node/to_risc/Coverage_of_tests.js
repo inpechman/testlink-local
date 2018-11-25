@@ -44,4 +44,6 @@ async function getPercentCoverageForProject(projectName) {
     return resultInPercent;
 }
 
-getPercentCoverageForProject('demo project')
+
+module.exports.getPercentCoverageForProject = getPercentCoverageForProject;
+// getPercentCoverageForProject('demo project')
