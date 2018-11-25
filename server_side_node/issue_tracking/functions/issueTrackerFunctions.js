@@ -54,14 +54,16 @@ module.exports = {
         console.log('started');
         try {
             let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
-            console.log('fixed bugs', fixedBugs);
+            console.log('fixed bugs ', fixedBugs);
+            let filteredBugs = await filterOutDoublesFromTestingList(fixedBugs);
+            console.log('filtered bugs ', filteredBugs);
             if (fixedBugs.length >= min) {
                 //TODO: add related cases to new test plan
                 let groupedByTester = await groupBugsByTester(fixedBugs);
                 for (let [tester, bugs] of Object.entries(groupedByTester)) {
                     console.log(tester, bugs);
                     let relatedCases = await findRelatedCasesForBugs(bugs);
-                    let resultOfOperation = await toBeTested.makeRetestPlan(projectName, relatedCases, tester);
+                    let resultOfOperation = await toBeTested.makeRetestPlan(projectName, '1.1.35', relatedCases, tester);
                 }
             }
             return {status_ok: true}
@@ -119,6 +121,18 @@ const getCasesForExecutions = async (executions) => {
     }
     console.log('getCasesForExecutions',cases);
     return cases;
+};
+
+const filterOutDoublesFromTestingList = async (bugs)=>{
+    const filteredBugs = [];
+    for (const bug of bugs) {
+        let exists = await dbMgr.checkIfBugInTestingList(bug);
+        console.log('bug '+bug+': ',exists);
+        if (exists.length === 0) {
+            filteredBugs.push(bug);
+        }
+    }
+    return filteredBugs;
 };
 
 

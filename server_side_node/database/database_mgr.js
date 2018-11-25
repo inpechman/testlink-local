@@ -62,7 +62,7 @@ class DataBaseMGR {
     }
 
     async getProject(tlProjectId) {
-        return await this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`,[tlProjectId])
+        return await this.exeQuery(`SELECT * FROM projects WHERE tl_project_id=?`, [tlProjectId])
     }
 
     async getAllProjects() {
@@ -117,15 +117,15 @@ class DataBaseMGR {
         return await this.exeQuery(`SELECT * FROM bugs WHERE id=?`, [bugId]);
     }
 
-    async getBugByReporter(bugId){
+    async getBugByReporter(bugId) {
         console.log(bugId);
-        let bug = await this.exeQuery(`SELECT tester_id FROM bugs WHERE id=?`,[bugId]);
+        let bug = await this.exeQuery(`SELECT tester_id FROM bugs WHERE id=?`, [bugId]);
         console.log(bug);
         return bug[0].tester_id;
     }
 
-    async getBugs(bugs){
-        return this.exeQuery(`SELECT * FROM bugs WHERE id IN (?)`,[bugs])
+    async getBugs(bugs) {
+        return this.exeQuery(`SELECT * FROM bugs WHERE id IN (?)`, [bugs])
     }
 
     async addBugToTestingList(bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount = 1) {
@@ -135,6 +135,10 @@ class DataBaseMGR {
 
     async getBugFromTestingList(bugId, reportCount) {
         return await this.exeQuery(`SELECT * FROM bugs_to_be_tested WHERE bug_id=? AND report_count=?`, [bugId, reportCount])
+    }
+
+    async checkIfBugInTestingList(bugId) {
+        return await this.exeQuery(`SELECT 1 FROM bugs_to_be_tested JOIN bugs ON bugs_to_be_tested.bug_id = bugs.id WHERE bug_id = ? AND bugs_to_be_tested.report_count = bugs.report_count`,[bugId]);
     }
 
     async getNextAutoIdForTable(tableNmae) {
