@@ -1,12 +1,12 @@
 const tlApiClient = require('../demo-tlapi-client/tlApiClient');
 const axios = require('axios')
 const db = require('../database/database_mgr')
+const constans = require('../constants/constants')
 
+let database = db.createDBmgr({ host: constans.DB_HOST });
 
-let database = db.createDBmgr({ host: '10.2.1.105' });
-
-var client = tlApiClient.createTLClient('testlink2.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php');
-client.setDevKey("20b497c0a4ae51e2869653bcca22727e")
+var client = tlApiClient.createTLClient(constans.TL_HOST, constans.TL_PORT, path = constans.TL_API_PATH);
+client.setDevKey(constans.TL_API_KEY)
 const URL_ALL_PROJECTS = 'http://10.2.1.119:5000/api/project/allProjects';
 
 
