@@ -128,9 +128,10 @@ class DataBaseMGR {
         return this.exeQuery(`SELECT * FROM bugs WHERE id IN (?)`, [bugs])
     }
 
-    async addBugToTestingList(bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount = 1) {
-        return await this.exeQuery(`INSERT INTO bugs_to_be_tested (bug_id, test_case_id, execution_status, last_execution_time_stamp, test_plan_id, report_count) VALUES (?,?,?,?,?,?)`,
-            [bugId, testCaseId, execStatus, lastExecTS, tlTestPlanId, reportCount]);
+    async addBugToTestingList(bugId, execStatus, lastExecTS, tlTestPlanId, reportCount = 1) {
+        console.log('addBugToTestingList ', arguments);
+        return await this.exeQuery(`INSERT INTO bugs_to_be_tested (bug_id, execution_status, last_execution_time_stamp, test_plan_id, report_count) VALUES (?,?,?,?,?)`,
+            [bugId, execStatus, lastExecTS, tlTestPlanId, reportCount]);
     }
 
     async getBugFromTestingList(bugId, reportCount) {
