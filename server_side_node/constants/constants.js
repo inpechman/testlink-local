@@ -7,7 +7,7 @@ module.exports.DB_PASS = 'Inpecman1';
 
 //testlink app config constants
 module.exports.TL_HOST = 'testlink2.local';
-module.exports.TL_PORT = 80;
+module.exports.TL_PORT = 8080;
 module.exports.TL_API_PATH = '/lib/api/xmlrpc/v1/custom_xmlrpc.php';
 module.exports.TL_API_KEY = '20b497c0a4ae51e2869653bcca22727e';
 

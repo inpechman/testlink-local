@@ -54,19 +54,22 @@ module.exports = {
         console.log('started');
         try {
             let fixedBugs = groupBugsByState(bugs)[constants.bugState.TO_BE_TESTED];
-            console.log('fixed bugs', fixedBugs);
-            if (fixedBugs.length >= min) {
+            console.log('fixed bugs ', fixedBugs);
+            let filteredBugs = await filterOutDoublesFromTestingList(fixedBugs);
+            console.log('filtered bugs ', filteredBugs);
+            if (filteredBugs.length >= min) {
                 //TODO: add related cases to new test plan
                 let groupedByTester = await groupBugsByTester(fixedBugs);
                 for (let [tester, bugs] of Object.entries(groupedByTester)) {
                     console.log(tester, bugs);
                     let relatedCases = await findRelatedCasesForBugs(bugs);
-                    let resultOfOperation = await toBeTested.makeRetestPlan(projectName, relatedCases, tester);
+                    let resultOfOperation = await toBeTested.makeRetestPlan(projectName, '1.1.35', relatedCases, tester);
                 }
             }
+            await insertRetestBugsInDB(filteredBugs);
             return {status_ok: true}
         } catch (e) {
-            console.log('error in handleBugStatusChange',e)
+            console.log('error in handleBugStatusChange', e)
         }
     }
 };
@@ -110,15 +113,37 @@ const findRelatedCasesForBugs = async (bugsIds) => {
 };
 
 const getCasesForExecutions = async (executions) => {
-    console.log('getCasesForExecutions',executions);
+    console.log('getCasesForExecutions', executions);
     let cases = [];
     for (const execution of executions) {
         let testCase = await tlClient.getTCByExecId(execution);
         console.log(testCase);
         cases.push(testCase.testcase_id);
     }
-    console.log('getCasesForExecutions',cases);
+    console.log('getCasesForExecutions', cases);
     return cases;
+};
+
+const insertRetestBugsInDB = async (bugs) => {
+    for (const bug of bugs) {
+        let bugsFromDB = await dbMgr.getBug(bug);
+        let bugFromDB = bugsFromDB[0];
+        console.log('bug from DB: ',bugFromDB);
+        let result = await dbMgr.addBugToTestingList(bug, bugFromDB.execution_status, bugFromDB.execution_time_stamp, bugFromDB.test_plan_id, bugFromDB.report_count);
+    }
+
+};
+
+const filterOutDoublesFromTestingList = async (bugs) => {
+    const filteredBugs = [];
+    for (const bug of bugs) {
+        let exists = await dbMgr.checkIfBugInTestingList(bug);
+        console.log('bug ' + bug + ': ', exists);
+        if (exists.length === 0) {
+            filteredBugs.push(bug);
+        }
+    }
+    return filteredBugs;
 };
 
 
