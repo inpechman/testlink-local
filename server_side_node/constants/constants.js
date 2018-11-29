@@ -1,6 +1,6 @@
 
 //database config constants
-module.exports.DB_HOST = 'localhost';
+module.exports.DB_HOST = '10.2.1.105';
 module.exports.DB_NAME = 'rtsuitetestlinksync';
 module.exports.DB_USER = 'rtsuitetestlinksync';
 module.exports.DB_PASS = 'Inpecman1';
@@ -10,6 +10,9 @@ module.exports.TL_HOST = 'testlink2.local';
 module.exports.TL_PORT = 8080;
 module.exports.TL_API_PATH = '/lib/api/xmlrpc/v1/custom_xmlrpc.php';
 module.exports.TL_API_KEY = '20b497c0a4ae51e2869653bcca22727e';
+
+//project scoper module connection detalse
+module.exports.URL_ALL_PROJECTS = 'http://10.2.1.119:5000/api/project/allProjects'
 
 //test execution status constants
 module.exports.EXEC_STAT_PASSED = 'p';
