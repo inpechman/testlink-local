@@ -14,7 +14,7 @@ async function getAllPlansForProjectFromTL(projectID) {
 
 
 async function getAllCasesForAllPlans(projectID) {
-    let lastStatus = [];
+    arrCurent = [];
     let allPlans = await getAllPlansForProjectFromTL(projectID);
     for (let i = 0; i < allPlans.length; i++) {
         let allCasesForPlan = await client.sendRequest('getTestCasesForTestPlan', { testprojectid: projectID, testplanid: allPlans[i].id });
@@ -22,17 +22,16 @@ async function getAllCasesForAllPlans(projectID) {
         for (let x = 0; x < keys.length; x++) {
             let lastExecution = await getLastExecutionOfCasePerPlan(projectID, allPlans[i].id, keys[x]);
             // console.log('plan id:', allPlans[i].id, 'case id:', keys[x], ' last exec: ', lastExecution);
-            if (true) {
-                lastStatus.push({ status: lastExecution.status, planID: allPlans[i].id, caseID: keys[x], execuitionDate: lastExecution.execution_ts })
-
-            }
+            let lastStatusObj = { status: lastExecution.status, planID: allPlans[i].id, caseID: keys[x], execuitionDate: lastExecution.execution_ts };
+            // console.log(lastStatusObj);
+            let a = await checkLastExecuitionPerDate(arrCurent, lastStatusObj);
         }
     }
-    console.log(lastStatus);
+
     console.log("end")
 }
 
-// getAllCasesForAllPlans(543)
+getAllCasesForAllPlans(543)
 
 
 
@@ -45,38 +44,70 @@ async function getLastExecutionOfCasePerPlan(projectID, testPlanID, testCaseID) 
 // getLastExecutionOfCasePerPlan(543,838,564)
 
 async function checkLastExecuitionPerDate(arrCurent, lastExecution) {
-    if (arrCurent.length == 0) {
-        arrCurent.push(lastExecution);
-    }
-    else {
-        for (let i = 0; i < arrCurent.length; i++) {
-            let dateSplit = lastExecution.execution_ts.split(" ")
-            let date = dateSplit[0];
-            let time = dateSplit[1];
-            let arrDate = date.split('-');
-            let year = arrDate[0];
-            let month = arrDate[1];
-            let day = arrDate[2];
-            let arrTime = time.split(':')
-            let hour = arrTime[0];
-            let minute = arrTime[1];
-            let second = arrTime[2];
-            
+    if (lastExecution.execuitionDate != undefined) {
+        let fullDate_new = await splitDate(lastExecution.execuitionDate);
+        if (arrCurent.length == 0) {
+            arrCurent[0] = lastExecution;
+            console.log('arrCurent = 0');
+            return arrCurent
+        }
+        if (arrCurent.length != 0) {
+            for (let i = 0; i < arrCurent.length; i++) {
+                if (arrCurent[i].caseID == lastExecution.caseID) {
+
+                    let fullDate_2 = await splitDate(arrCurent[i].execuitionDate)
+                    if (fullDate_2.year < fullDate_new.year) {
+                        arrCurent[i] = lastExecution;
+                        console.log('year');
+
+                        return arrCurent;
+                    }
+                    if (fullDate_2.month < fullDate_new.month) {
+                        arrCurent[i] = lastExecution;
+                        console.log('month');
+                        return arrCurent
+                    }
+                    if (fullDate_2.day < fullDate_new.day) {
+                        arrCurent[i] = lastExecution;
+                        console.log('day');
+
+                        return arrCurent;
+                    }
+                    if (fullDate_2.hour < lastExecution.hour) {
+                        arrCurent[i] = lastExecution;
+                        console.log('hour');
+
+                        return arrCurent;
+                    }
+                    if (fullDate_2.minute < lastExecution.minute) {
+                        arrCurent[i] = lastExecution;
+                        console.log('minute');
+
+                        return arrCurent
+                    }
+                    if (fullDate_2.second < fullDate_new.second) {
+                        arrCurent[i] = lastExecution;
+                        console.log('second');
+
+                        return arrCurent;
+                    }
+
+                }
+            }
         }
     }
-
 }
 
 
-// let fullDate = '2018-11-27 14:11:21';
-// let dateSplit = fullDate.split(' ');
-// let date = dateSplit[0];
-// let time = dateSplit[1];
-// console.log(date, " ", time);
+async function splitDate(strDate) {
+    let dateSplit = strDate.split(" ")
+    let date = dateSplit[0];
+    let time = dateSplit[1];
+    let arrDate = date.split('-');
+    let arrTime = time.split(':')
+    let fullDate = { year: arrDate[0], month: arrDate[1], day: arrDate[2], hour: arrTime[0], minute: arrTime[1], second: arrTime[2] }
+    // console.log(fullDate);
+    return fullDate;
+}
 
-// // let day = dateSplit[2][0]
-// // let arrDate = [];
-// // arrDate.push(dateSplit[0])
-// // arrDate.push(dateSplit[1])
-// // arrDate.push(dateSplit[2][0]+dateSplit[2][1])
-// console.log(dateSplit);
+// splitDate('2018-11-27 14:11:24');
