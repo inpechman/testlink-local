@@ -12,9 +12,14 @@ async function getAllPlansForProjectFromTL(projectID) {
 
 // getAllPlansForProjectFromTL(543);
 
+async function getProjectIDByName(projectName) {
+    let projectID = await client.sendRequest('getTestProjectByName', { testprojectname: projectName });
 
-async function getAllCasesForAllPlans(projectID) {
-    
+    return projectID.id;
+}
+async function getPercentStatusForAllCasesPerProgect(projectName) {
+    let projectID = await getProjectIDByName(projectName)
+    console.log('project id from tl ', projectID);
     var arrCurent = [];
     let allPlans = await getAllPlansForProjectFromTL(projectID);
     for (let i = 0; i < allPlans.length; i++) {
@@ -27,12 +32,38 @@ async function getAllCasesForAllPlans(projectID) {
         }
     }
     console.log('arrCurent: ', arrCurent);
+    let statusPecent = await percentStatusForCasesPerProject(arrCurent);
+    return statusPecent
     console.log("end")
 }
 
-getAllCasesForAllPlans(543)
+// getPercentStatusForAllCasesPerProgect('TRB')
 
+async function percentStatusForCasesPerProject(arrCases) {
+    let statusForAllCases = { passed: 0, blocked: 0, failed: 0 };
+    for (let i = 0; i < arrCases.length; i++) {
+        switch (arrCases[i].status) {
+            case 'p':
+                statusForAllCases.passed += 1;
+                break;
+            case 'f':
+                statusForAllCases.failed += 1;
+                break
+            case 'b':
+                statusForAllCases.blocked += 1;
+                break
+            default:
+                console.log('default');
+                break;
+        }
+    }
+    let percentAll = statusForAllCases.passed + statusForAllCases.failed + statusForAllCases.blocked;
+    let onePercent = percentAll / 100;
+    let percentStatus = { passed: statusForAllCases.passed / onePercent, blocked: statusForAllCases.blocked / onePercent, failed: statusForAllCases.failed / onePercent }
+    // console.log(JSON.stringify(percentStatus));
 
+    return percentStatus
+}
 
 async function getLastExecutionOfCasePerPlan(projectID, testPlanID, testCaseID) {
     let lastExecution = await client.sendRequest('getLastExecutionResult', { testprojectid: projectID, testplanid: testPlanID, testcaseid: testCaseID });
@@ -71,4 +102,4 @@ async function checkLastExecuitionPerDate(arrCurent, lastExecution) {
     return arrCurent
 }
 
-
+module.exports.getPercentStatus = getPercentStatusForAllCasesPerProgect;
