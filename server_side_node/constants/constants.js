@@ -1,6 +1,6 @@
 
 //database config constants
-module.exports.DB_HOST = '10.2.1.107';
+module.exports.DB_HOST = '10.2.1.100';
 module.exports.DB_NAME = 'rtsuitetestlinksync';
 module.exports.DB_USER = 'rtsuitetestlinksync';
 module.exports.DB_PASS = 'Inpecman1';
