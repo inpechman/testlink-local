@@ -31,6 +31,8 @@ class DataBaseMGR {
 
     exeQuery(sql, placeholders = []) {
         return new Promise((resolve, reject) => {
+            console.log(connectionDetails);
+            
             let connection = mysql.createConnection(this.connectionDetails);
             connection.query(sql, placeholders, (err, res, fileds) => {
                 if (err) {
@@ -145,6 +147,11 @@ class DataBaseMGR {
     async getNextAutoIdForTable(tableNmae) {
         let tableInfo = await this.exeQuery(`SHOW TABLE STATUS LIKE ?;`, [tableNmae]);
         return tableInfo[0].Auto_increment;
+    }
+
+
+    async getAllBugsID(){
+        return await this.exeQuery(`SELECT bug_id FROM bugs_to_be_tested WHERE 1`);
     }
 
 }
