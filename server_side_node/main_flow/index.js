@@ -7,22 +7,22 @@ let database = db.createDBmgr({ host: constans.DB_HOST });
 
 var client = tlApiClient.createTLClient(constans.TL_HOST, constans.TL_PORT, path = constans.TL_API_PATH);
 client.setDevKey(constans.TL_API_KEY)
-const URL_ALL_PROJECTS = 'http://10.2.1.119:5000/api/project/allProjects';
+const URL_ALL_PROJECTS = 'http://10.2.2.114:5000/api/project/allProjects';
 
 
 
 
 /**
  * this function gets url of all projects from Scoper API
- * 
- * @param {String} urlAllProjects = [{_id:int,projectNmae}] 
+ *
+ * @param {String} urlAllProjects = [{_id:int,projectNmae}]
  * @param {String} projectName = project name
- * 
- * @returns {String} url for one project 
+ *
+ * @returns {String} url for one project
  */
 async function createUrlSpec(urlAllProjects, projectName) {
     var res = await axios.default.get(urlAllProjects);
-    var urlSpec = "http://10.2.1.119:5000/api/userStory/allStories/"
+    var urlSpec = "http://10.2.2.114:5000/api/userStory/allStories/"
     for (i = 0; i < res.data.length; i++) {
         if (res.data[i].projectName == projectName) {
             return urlSpec + res.data[i]._id;
@@ -31,7 +31,7 @@ async function createUrlSpec(urlAllProjects, projectName) {
 }
 
 /**
- *this function gets url for one project 
+ *this function gets url for one project
 
  * @param {String} urlSpec = {projectName:"bla bla bla",subjects:[{"subjectName": "Login","subjectDescreption": "login bla",
  * "requirements":[{"_id": "5beac2ad99688c0468b011b3","subject": "Login","title": "bla","userStory": "As a user 1: bla *3"}]}]}
@@ -45,9 +45,9 @@ async function getProjectNameFromApi(urlSpec) {
 
 /**
  * this function gets project name and create prefix to project
- * 
- * @param {String} projectName 
- * 
+ *
+ * @param {String} projectName
+ *
  * @returns {String}project prefix
  */
 async function createTestProjectPrefix(projectName) {
@@ -68,11 +68,11 @@ async function createTestProjectPrefix(projectName) {
 
 /**
  * this function get project ID or project prefix from testLink.
- * 
- * 
+ *
+ *
  * @param {String} projectName project name.
- * @param {boolean} option_prefix optional for get prefix. default param option_perfix = false. 
- * 
+ * @param {boolean} option_prefix optional for get prefix. default param option_perfix = false.
+ *
  * @returns{String} if param option_prefix = true return project prefix.
  * @returns{String} if param option_prefix = false return project ID.
  */
@@ -88,10 +88,10 @@ async function getProjectIdFromTL(projectName, option_prefix = false) {
 
 
 /**
- * this function gets requirement specifiction doc ID from scoper API 
+ * this function gets requirement specifiction doc ID from scoper API
  * @param {String} urlSpec url to scoper API for one project
  * @param {String} reqSpecName requirement specifiction name
- * 
+ *
  * @returns{String} req spec docID
  */
 async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
@@ -105,11 +105,11 @@ async function getReqSpecDocIdFromApi(urlSpec, reqSpecName) {
 }
 
 /**
- * this function take scope for req spec from scoper API 
- * 
+ * this function take scope for req spec from scoper API
+ *
  * @param {String} urlSpec url to scoper API for one project
  * @param {String} reqSpecName requirement specifiction name
- * 
+ *
  * @returns{String} scope for requirement specifiction
  */
 async function getScopeForReqSpecFromApi(urlSpec, reqSpecName) {
@@ -124,10 +124,10 @@ async function getScopeForReqSpecFromApi(urlSpec, reqSpecName) {
 
 
 /**
- * 
+ *
  * @param {String} projectName project name
  * @param {String} reqSpecDocId requirement specifiction docID
- * 
+ *
  * @returns{int} requirement specifiction ID
  */
 async function getReqSpecIdFromTestLink(projectName, reqSpecDocId) {
@@ -138,11 +138,11 @@ async function getReqSpecIdFromTestLink(projectName, reqSpecDocId) {
 
 
 /**
- * this function take title or scope for requirement from scoper API 
- * 
+ * this function take title or scope for requirement from scoper API
+ *
  * @param {String} urlSpec url to scoper API for one project
- * @param {String} requirementName requirement name 
- * @param {String} reqSpecName req spc name 
+ * @param {String} requirementName requirement name
+ * @param {String} reqSpecName req spc name
  * @param {String} titleOrScope "title" or "scope"
  * @returns{String} if param titleOrScope = "title" return title for requirement
  * if param titleOrScope = "scope" return scope for requirement
@@ -171,8 +171,8 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
 }
 
 /**
- * this function create all requirements for one req spec from scoper API 
- * 
+ * this function create all requirements for one req spec from scoper API
+ *
  * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
  * @param {String} urlSpec url to scoper API for one project
  * @param {int} reqSpecIndex number for index to one req spec
@@ -190,7 +190,7 @@ async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, project
  * this function create all req spec and all requirements per project form scoper API
  * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
  * @param {String} projectName project name
- * 
+ *
  * void
  */
 async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
@@ -204,6 +204,16 @@ async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
     }
 }
 
+
+async function createAndAssignIssueTreckerSystem(projectID, projectName) {
+    // client.sendRequest('createNewIssueTracker');
+    let res = await client.sendRequest('createNewIssueTracker', {'testprojectname':projectName, 'testprojectid':projectID, 'issuetrackerurl':'http://'+constans.APP_API_HOST+':'+constans.APP_API_PORT+'/testlink/issuetracker'});
+    console.log('response from creating tracker',res);
+    let res2 = await client.sendRequest('assignITSForProject',{'issuetrackerid':res['id'],'testprojectid':projectID})
+    console.log('response from assigning tracker', res2);
+
+
+}
 
 /**
  * this function create new project from scoper API and create all req spec and all requirements all data from scoper API.
@@ -225,16 +235,22 @@ async function createProject(urlAllProjects, projectName) {
     let projectID = await getProjectIdFromTL(projectName);
     let add_info_to_db = await database.createProject(projectID, projectName1, testCasePrefix)
     await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
+
+
+    await createAndAssignIssueTreckerSystem(projectID, projectName)
+
 }
 
 
+createProject('http://10.2.2.114:5000/api/project/allProjects', 'scoper')
+
 /**
- * this function create new requirement specifiction data drom scoper API 
- * @param {String} projectName project name 
+ * this function create new requirement specifiction data drom scoper API
+ * @param {String} projectName project name
  * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
  * @param {String} reqSpecName req spec name
  * void
- * 
+ *
  */
 async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
@@ -253,12 +269,12 @@ async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
 
 /**
  * this function create new requirement gets data from scoper API
- * 
+ *
  * @param {String} urlAllProjects scoper url for all projects[{_id:"",projectName:""}]
- * @param {String} projectName project name 
+ * @param {String} projectName project name
  * @param {String} reqSpecDocId requirement specifiction doc ID
  * @param {String} requirementName requirement name
- * void 
+ * void
  */
 async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requirementName) {
     console.log("cr_par ", urlAllProjects, projectName, reqSpecDocId, requirementName);
