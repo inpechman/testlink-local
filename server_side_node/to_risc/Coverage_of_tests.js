@@ -1,7 +1,7 @@
 const tlApiClient = require('../demo-tlapi-client/tlApiClient');
 
-let client = tlApiClient.createTLClient('testlink2.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php')
-client.setDevKey('20b497c0a4ae51e2869653bcca22727e');
+let client = tlApiClient.createTLClient('testlink.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php')
+client.setDevKey(' b5570b0be54dbd061a61a1c24bfbe5ed');
 
 async function getAlRequirementsForProject(projectName) {
     let all_requirements_for_project = await client.sendRequest('getRequirements', { testprojectname: projectName });

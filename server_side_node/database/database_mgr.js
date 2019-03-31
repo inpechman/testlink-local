@@ -53,13 +53,15 @@ class DataBaseMGR {
             return 'already exists';
         } else {
             console.log(projectsTable[0], 'not exists');
-            let sqlStr = fs.readFileSync(sqlFilePath).toString('utf-8');
+            let sqlStr = fs.readFileSync("/app/backup/127_0_0_2.sql").toString('utf-8');
             console.log(sqlStr);
             return await this.exeQuery(sqlStr)
         }
     }
 
     async createProject(tlProjectId, name, prefix) {
+        console.log('createProject()...7');
+        
         return await this.exeQuery(`INSERT INTO projects (tl_project_id, name, tl_project_pre) VALUES (?,?,?) ON DUPLICATE KEY UPDATE name=?`, [tlProjectId, name, prefix, name])
     }
 

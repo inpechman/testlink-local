@@ -21,6 +21,8 @@ class TLAPIClient {
     }
 
     sendRequest(tlMethod, params) {
+        console.log('sendRequest()...5');
+        
         return new Promise((resolve, reject) => {
             this.xmlrpc_client.methodCall('tl.' + tlMethod, [{devKey: this.devKey, ...params}], (error, value) => {
                 if (error || Array.isArray(value) && value.length > 0 && value[0].code  ) {

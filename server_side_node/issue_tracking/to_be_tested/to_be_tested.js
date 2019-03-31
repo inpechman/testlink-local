@@ -1,6 +1,6 @@
 const tlApiClient = require('../../demo-tlapi-client/tlApiClient');
-var client = tlApiClient.createTLClient('testlink2.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php');
-client.setDevKey("20b497c0a4ae51e2869653bcca22727e")
+var client = tlApiClient.createTLClient('testlink.local', 80, path = '/lib/api/xmlrpc/v1/custom_xmlrpc.php');
+client.setDevKey(" b5570b0be54dbd061a61a1c24bfbe5ed")
 var getProjectIdByName = require('../../main_flow')
 const db = require('../../database/database_mgr');
 const constants = require('../../constants/constants')

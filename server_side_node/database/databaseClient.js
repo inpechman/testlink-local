@@ -13,7 +13,7 @@ module.exports.test = async function () {
         // });
         console.log(dbMgr);
         
-        let initRes = await dbMgr.initTables('./database/init_tables.sql');
+        let initRes = await dbMgr.initTables('./init_tables.sql');
         console.log(initRes);
         let projectC = await dbMgr.createProject(54, 'sdfavsf');
         console.log(projectC);

@@ -1,6 +1,6 @@
 const EventEmitter = require('events');
 const tlAPIClient = require('../../demo-tlapi-client/tlApiClient');
-const DEV_KEY = '20b497c0a4ae51e2869653bcca22727e';
+const DEV_KEY = require('../../constants/constants').TL_API_KEY;
 const COVERAGE = module.exports.COVERAGE = 'coverage';
 const EXECUTION = module.exports.EXECUTION = 'execution';
 const events = {};

@@ -1,0 +1,98 @@
+version: '2'
+
+services:
+
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_testlink
+      - MARIADB_DATABASE=bitnami_testlink
+    volumes:
+      - 'mariadb_data:/bitnami'
+    # networks: 
+    #   - rtsuite-net 
+
+  testlink:
+    image: 'bitnami/testlink'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - 'testlink_data:/bitnami'
+      - './testlink-1.9.18:/home/bitnami'
+      - ${PWD}/testlink-1.9.18/lib/api/xmlrpc/v1/custom_xmlrpc.php:/opt/bitnami/testlink/lib/api/xmlrpc/v1/custom_xmlrpc.php
+      - ${PWD}/testlink-1.9.18/lib/api/xmlrpc/v1/customAPIErrors.php:/opt/bitnami/testlink/lib/api/xmlrpc/v1/customAPIErrors.php
+      - ${PWD}/testlink-1.9.18/lib/issuetrackerintegration/rtsuiterestInterface.class.php:/opt/bitnami/testlink/lib/issuetrackerintegration/rtsuiterestInterface.class.php
+      - ${PWD}/testlink-1.9.18/third_party/rtsuite-api-client/rt_suite_api_client.php:/opt/bitnami/testlink//third_party/rtsuite-api-client/rt_suite_api_client.php
+      - ${PWD}/testlink-1.9.18/lib/functions/tlIssueTracker.class.php:/opt/bitnami/testlink/lib/functions/tlIssueTracker.class.php
+    depends_on:
+      - mariadb
+    environment:
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - TESTLINK_DATABASE_USER=bn_testlink
+      - TESTLINK_DATABASE_NAME=bitnami_testlink
+      - ALLOW_EMPTY_PASSWORD=yes
+      - TESTLINK_USERNAME=admin
+      - TESTLINK_PASSWORD=verysecretadminpassword
+      - TESTLINK_EMAIL=admin@example.com
+      - SMTP_CONNECTION_MODE=tls
+      - SMTP_ENABLE=true
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USER=mosheb@ravtech.co.il
+      - SMTP_PASSWORD=mo13061990
+
+    # networks: 
+    #   - rtsuite-net 
+
+    # command: >
+    #   bash -c "cp /home/bitnami/lib/api/xmlrpc/v1/custom_xmlrpc.php /opt/bitnami/testlink/lib/api/xmlrpc/v1/custom_xmlrpc.php"
+  testlink-server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-testlink
+    container_name: testlink-server
+    ports:
+      - "3333:3333"
+    volumes:
+      - .:/app
+      - '/app/node_modules'
+    command: bash -c "cat /app/server_side_node/database/init_tables.sql && node server_side_node/index.js"
+    restart: "no"
+    networks: 
+      - rtsuite_rtsuite-net
+      - default  
+# -c "ls /app/server_side_node/database/server_side_node/database/ && node server_side_node/index.js"
+  # mysql-testlink:
+  #   image: mysql:5.7
+  #   volumes:
+  #      - mysql_data:/var/lib/mysql
+  #      - ./config/mysql:/docker-entrypoint-initdb.d
+  #   ports:
+  #     - "3307:3306"
+  #   restart: "no"
+  #   environment:
+  #     MYSQL_DATABASE: testlink
+  #     MYSQL_USER: root 
+  #     MYSQL_ROOT_PASSWORD: ravtech
+  #   container_name: mysql-testlink
+    # networks: 
+    #   - rtsuite-net 
+
+volumes:
+  mariadb_data:
+    driver: local
+  testlink_data:
+    driver: local
+  # mysql_data:
+  #   driver: local
+
+networks: 
+  rtsuite_rtsuite-net:
+    external: true
+      # name: 
+        # driver: bridge
+
+  

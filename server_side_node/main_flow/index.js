@@ -2,14 +2,11 @@ const tlApiClient = require('../demo-tlapi-client/tlApiClient');
 const axios = require('axios')
 const db = require('../database/database_mgr')
 const constans = require('../constants/constants')
-
 let database = db.createDBmgr({ host: constans.DB_HOST });
 
 var client = tlApiClient.createTLClient(constans.TL_HOST, constans.TL_PORT, path = constans.TL_API_PATH);
 client.setDevKey(constans.TL_API_KEY)
-const URL_ALL_PROJECTS = 'http://10.2.2.114:5000/api/project/allProjects';
-
-
+const URL_ALL_PROJECTS = 'http://scoper-server:5000/api/project/allProjects';
 
 
 /**
@@ -21,23 +18,25 @@ const URL_ALL_PROJECTS = 'http://10.2.2.114:5000/api/project/allProjects';
  * @returns {String} url for one project
  */
 async function createUrlSpec(urlAllProjects, projectName) {
+    console.log('createUrlSpec()...2')
     var res = await axios.default.get(urlAllProjects);
-    var urlSpec = "http://10.2.2.114:5000/api/userStory/allStories/"
+    var urlSpec = "http://scoper-server:5000/api/userStory/allStories/"
     for (i = 0; i < res.data.length; i++) {
         if (res.data[i].projectName == projectName) {
             return urlSpec + res.data[i]._id;
         }
     }
-}
+} 
 
 /**
  *this function gets url for one project
-
+ 
  * @param {String} urlSpec = {projectName:"bla bla bla",subjects:[{"subjectName": "Login","subjectDescreption": "login bla",
  * "requirements":[{"_id": "5beac2ad99688c0468b011b3","subject": "Login","title": "bla","userStory": "As a user 1: bla *3"}]}]}
  * @returns{String} project name from scoper API
  */
 async function getProjectNameFromApi(urlSpec) {
+    console.log('getProjectNameFromApi()...3')
     var res = await axios.default.get(urlSpec);
     return res.data.projectName;
 }
@@ -51,6 +50,8 @@ async function getProjectNameFromApi(urlSpec) {
  * @returns {String}project prefix
  */
 async function createTestProjectPrefix(projectName) {
+    console.log('createTestProjectPrefix()...4');
+    
     var projectNameSplit = await projectName.trim().split("");
     let id_cuonter = await database.getNextAutoIdForTable('projects')
     for (let i = 0; i < projectNameSplit.length; i++) {
@@ -77,6 +78,8 @@ async function createTestProjectPrefix(projectName) {
  * @returns{String} if param option_prefix = false return project ID.
  */
 async function getProjectIdFromTL(projectName, option_prefix = false) {
+    console.log('getProjectIdFromTL()...6');
+    
     let getProjectId = await client.sendRequest('getTestProjectByName', { testprojectname: projectName });
     if (option_prefix) {
         return getProjectId.prefix
@@ -162,12 +165,12 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
                     if (titleOrScope == 'scope') {
                         return requirementScope;
                     }
-
+                    
                 }
             }
         }
     }
-
+    
 }
 
 /**
@@ -194,6 +197,8 @@ async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, project
  * void
  */
 async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
+    console.log('addAllReqSpecAndAllRequirements()...8');
+    
     let urlSpec = await createUrlSpec(urlAllProjects, projectName)
     let res = await axios.default.get(urlSpec);
     let projectNameFromApi = await res.data.projectName;
@@ -206,13 +211,15 @@ async function addAllReqSpecAndAllRequirements(urlAllProjects, projectName) {
 
 
 async function createAndAssignIssueTreckerSystem(projectID, projectName) {
+    console.log('createAndAssignIssueTreckerSystem()...9');
+    
     // client.sendRequest('createNewIssueTracker');
     let res = await client.sendRequest('createNewIssueTracker', {'testprojectname':projectName, 'testprojectid':projectID, 'issuetrackerurl':'http://'+constans.APP_API_HOST+':'+constans.APP_API_PORT+'/testlink/issuetracker'});
     console.log('response from creating tracker',res);
     let res2 = await client.sendRequest('assignITSForProject',{'issuetrackerid':res['id'],'testprojectid':projectID})
     console.log('response from assigning tracker', res2);
-
-
+    
+    
 }
 
 /**
@@ -222,6 +229,8 @@ async function createAndAssignIssueTreckerSystem(projectID, projectName) {
  * void
  */
 async function createProject(urlAllProjects, projectName) {
+    console.log('createProject()...1');
+    
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     console.log('urlSpec: ', urlSpec);
     let projectName1 = await getProjectNameFromApi(urlSpec);
@@ -235,14 +244,13 @@ async function createProject(urlAllProjects, projectName) {
     let projectID = await getProjectIdFromTL(projectName);
     let add_info_to_db = await database.createProject(projectID, projectName1, testCasePrefix)
     await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
-
-
+    
+    
     await createAndAssignIssueTreckerSystem(projectID, projectName)
-
+    
 }
 
 
-createProject('http://10.2.2.114:5000/api/project/allProjects', 'scoper')
 
 /**
  * this function create new requirement specifiction data drom scoper API
@@ -264,7 +272,7 @@ async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
         parentid: parentId, reqspecdocid: reqSpecDocId, title: title, scope: scope
     })
     let add_info_to_db = await database.createReqSpec(addReqSpec.id, parentId, reqSpecDocId, scope);
-
+    
 }
 
 /**
@@ -278,7 +286,7 @@ async function createReqSpeq(projectName, urlAllProjects, reqSpecName) {
  */
 async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requirementName) {
     console.log("cr_par ", urlAllProjects, projectName, reqSpecDocId, requirementName);
-
+    
     let urlSpec = await createUrlSpec(urlAllProjects, projectName);
     let testProjectId = await getProjectIdFromTL(projectName);
     let reqSpecId = await getReqSpecIdFromTestLink(projectName, reqSpecDocId);
@@ -287,7 +295,7 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
     console.log('title: ', title);
     let scope = await getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, reqSpecDocId, 'scope');
     console.log('scope: ', scope);
-
+    
     let addRequirement = await client.sendRequest('addRequirement', {
         testprojectid: testProjectId, reqspecid: reqSpecId,
         requirementdocid: requirementDocId, title: title, scope: scope,
@@ -296,9 +304,13 @@ async function createRequirement(urlAllProjects, projectName, reqSpecDocId, requ
     let add_info_to_db = database.createRequirement(addRequirement.id, title, scope, reqSpecId);
 }
 
+
+
 module.exports.getProjectIdByName = getProjectIdFromTL;
+module.exports.createProject = createProject;
+
 // createRequirement(URL_ALL_PROJECTS,'TRB','Main screen','main screen')
 // getTitleForRequirementFromApi('http://10.2.1.119:5000/api/userStory/allStories/5be44a6216632a2e2cf2d7b0', 'main screen', 'Main screen')
-// createProject(URL_ALL_PROJECTS, "IOS")
+// createProject(URL_ALL_PROJECTS, "my test planner 4")
 // createReqSpeq("TRB",URL_ALL_PROJECTS,"Main screen")
 
