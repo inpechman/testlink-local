@@ -184,6 +184,8 @@ async function getTitleOrScopeForRequirementFromApi(urlSpec, requirementName, re
 async function addAllRequirements(urlAllProjects, urlSpec, reqSpecIndex, projectName) {
     let res = await axios.default.get(urlSpec);
     let requirements = res.data.subjects[reqSpecIndex].requirements;
+    console.log('requirements', requirements);
+    
     for (let i = 0; i < requirements.length; i++) {
         await createRequirement(urlAllProjects, projectName, res.data.subjects[reqSpecIndex].subjectName, requirements[i].title)
     }
@@ -235,18 +237,17 @@ async function createProject(urlAllProjects, projectName) {
     console.log('urlSpec: ', urlSpec);
     let projectName1 = await getProjectNameFromApi(urlSpec);
     console.log('projectName1: ', projectName1);
-    let testCasePrefix = await createTestProjectPrefix(projectName)
+    let testCasePrefix = await createTestProjectPrefix(projectName);
     console.log('prefix: ', testCasePrefix);
     let createdProject = await client.sendRequest('createTestProject', {
         testprojectname: projectName1, testcaseprefix: testCasePrefix, notes: "defult",
         options: [1, 1, 1, 1], active: 1, public: 1
     })
     let projectID = await getProjectIdFromTL(projectName);
-    let add_info_to_db = await database.createProject(projectID, projectName1, testCasePrefix)
-    await addAllReqSpecAndAllRequirements(urlAllProjects, projectName)
+    let add_info_to_db = await database.createProject(projectID, projectName1, testCasePrefix);
+    await addAllReqSpecAndAllRequirements(urlAllProjects, projectName);
     
-    
-    await createAndAssignIssueTreckerSystem(projectID, projectName)
+    await createAndAssignIssueTreckerSystem(projectID, projectName);
     
 }
 
